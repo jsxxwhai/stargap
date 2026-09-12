@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-12
+
+### Fixed
+
+- Ignore bare category words such as `cli` when matching section headings, removing false positives from unrelated sections like "Dotnet CLI".
+- Keep qualified compound keywords such as `cli-frameworks` eligible for exact section matches.
+- Add two regression tests for the section-matching behavior.
+
 ## [0.1.0] - 2026-09-12
 
 ### Added
@@ -15,5 +23,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Composite GitHub Action and scheduled workflow example.
 - 33 offline tests covering matching, scanning, caching, rate limits and rendering.
 
-[Unreleased]: https://github.com/jsxxwhai/stargap/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/jsxxwhai/stargap/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/jsxxwhai/stargap/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jsxxwhai/stargap/releases/tag/v0.1.0

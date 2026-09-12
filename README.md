@@ -142,7 +142,7 @@ const gaps = await findGaps(profile, { minStars: 500 });
 Run a weekly gap check without installing anything:
 
 ```yaml
-- uses: jsxxwhai/stargap@v0.1.0
+- uses: jsxxwhai/stargap@v0.1.1
   with:
     min-stars: "1000"
     output: stargap-report.md
@@ -155,7 +155,7 @@ The report path is exposed as `steps.<id>.outputs.report`. See [examples/stargap
 ```bash
 git clone https://github.com/jsxxwhai/stargap
 cd stargap
-npm test        # 33 tests, no network required
+npm test        # 35 tests, no network required
 ```
 
 Everything is plain ESM with zero runtime dependencies. Tests inject fake `fetch` and search functions, so the suite never touches the network.

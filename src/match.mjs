@@ -97,6 +97,22 @@ function isSelfTitle(heading, selfTokens) {
   return words.every((word) => selfTokens.has(word));
 }
 
+/**
+ * Bare category words that are too broad to justify a section match on their
+ * own. Unlike GENERIC_TERMS these are still allowed inside compounds, so
+ * "cli-frameworks" can match "CLI Frameworks"; only the bare word "cli" is
+ * ignored. Without this, every "Dotnet CLI" section looks like a fit for
+ * every CLI project.
+ */
+const WEAK_SECTION_TERMS = new Set([
+  "cli", "github", "oss", "distribution", "awesome", "awesome-list",
+]);
+
+/** True only when the whole keyword is a bare category word. */
+function isWeakKeyword(keyword) {
+  return WEAK_SECTION_TERMS.has(String(keyword).toLowerCase());
+}
+
 /** Is this heading a real topic section worth matching against? */
 export function isTopicHeading(heading) {
   const cleaned = cleanHeading(heading);
@@ -131,7 +147,10 @@ export function analyzeReadme(
   // is opt-in because a project's own declared topic is legitimately common
   // across lists in its own ecosystem.
   const specificKeywords = targetKeywords.filter(
-    (item) => !isGenericTerm(item.keyword) && idf(item.keyword) >= specificThreshold,
+    (item) =>
+      !isGenericTerm(item.keyword) &&
+      !isWeakKeyword(item.keyword) &&
+      idf(item.keyword) >= specificThreshold,
   );
   const matchedSections = [];
   for (const rawHeading of headings) {

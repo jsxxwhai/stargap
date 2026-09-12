@@ -1,6 +1,6 @@
 {
   "name": "stargap",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Find the GitHub repos your project should have been mentioned in.",
   "type": "module",
   "bin": { "stargap": "bin/stargap.mjs" },

@@ -143,3 +143,31 @@ test("a genuine topic section is still matched when a self title exists", () => 
   assert.equal(analysis.matchedSections.length, 1);
   assert.equal(analysis.bestSection.heading, "Static Analysis");
 });
+test("bare category keywords do not match unrelated sections", () => {
+  const readme = [
+    "# Awesome CLI frameworks",
+    "## Useful awesome list for Dotnet cli",
+    ...Array.from({ length: 20 }, (_, i) => `- [Tool ${i}](https://github.com/x/t${i}) - thing`),
+  ].join("\n");
+  const analysis = analyzeReadme(
+    readme,
+    [{ keyword: "cli", score: 10 }],
+    { idf: () => 1, repoName: "awesome-cli-frameworks" },
+  );
+  assert.deepEqual(analysis.matchedSections, []);
+});
+
+test("a specific compound still matches its qualified section", () => {
+  const readme = [
+    "# Awesome CLI frameworks",
+    "## CLI Frameworks",
+    ...Array.from({ length: 20 }, (_, i) => `- [Tool ${i}](https://github.com/x/t${i}) - thing`),
+  ].join("\n");
+  const analysis = analyzeReadme(
+    readme,
+    [{ keyword: "cli-frameworks", score: 10 }],
+    { idf: () => 1, repoName: "awesome-python" },
+  );
+  assert.equal(analysis.matchedSections.length, 1);
+  assert.equal(analysis.bestSection.heading, "CLI Frameworks");
+});
