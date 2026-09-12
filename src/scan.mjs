@@ -5,6 +5,7 @@
 
 import { fetchRepo, isRateLimited, rateLimitHint, searchRepositories } from "./github.mjs";
 import { isGenericTerm } from "./generic.mjs";
+import { domainEvidence } from "./domain.mjs";
 import { fetchReadme } from "./readme.mjs";
 import { analyzeReadme } from "./match.mjs";
 import {
@@ -36,6 +37,11 @@ export function profileRepo(input) {
     topics,
     readme,
     url: input.url ?? `https://github.com/${input.fullName}`,
+    homepage: input.homepage ?? "",
+    license: input.license ?? null,
+    stars: input.stars ?? 0,
+    pushedAt: input.pushedAt ?? null,
+    updatedAt: input.updatedAt ?? null,
     // Full set, including README prose — used for ranking candidate lists.
     keywords: extractKeywords({ name, description, topics, readme }),
     // Declared identity: what the maintainer explicitly declares the project
@@ -56,11 +62,16 @@ export async function loadRepoProfile(fullName, options = {}) {
   const readme = await fetchReadme(fullName, options);
   return profileRepo({
     fullName: repo.fullName,
-    name: repo.fullName.split("/").pop(),
+    name: repo.name ?? repo.fullName.split("/").pop(),
     description: repo.description ?? "",
     topics: repo.topics ?? [],
     readme: readme ?? "",
     url: repo.url,
+    homepage: repo.homepage ?? "",
+    license: repo.license ?? null,
+    stars: repo.stars ?? 0,
+    pushedAt: repo.pushedAt ?? null,
+    updatedAt: repo.updatedAt ?? null,
   });
 }
 
@@ -221,6 +232,15 @@ export async function findGaps(profile, options = {}) {
     if (!analysis.isList) continue;
     if (!analysis.matchedSections.length) continue;
 
+    // A section heading must also belong to the candidate list's own declared
+    // subject. Otherwise a JavaScript list can be reported as a "Transpilers"
+    // gap for a Python linter simply because one word collides.
+    const domain = domainEvidence(profile.identityKeywords, repo, { idf });
+    if (!domain.ok) {
+      onProgress(`  skipped ${repo.fullName}: ${domain.reason}`);
+      continue;
+    }
+
     // A confirmed section match is the strongest possible relevance signal.
     const matchScore = Math.max(relevanceScore, analysis.bestSection?.score ?? 0);
 
@@ -235,8 +255,9 @@ export async function findGaps(profile, options = {}) {
       relevance: matchScore,
       sectionCount: analysis.matchedSections.length,
       score: gapScore({ stars: repo.stars, listnessScore, relevanceScore: matchScore }),
-      reason: describeReason(repo, listnessScore, matchScore, analysis),
+      reason: describeReason(repo, listnessScore, matchScore, analysis, domain),
       section: analysis.bestSection?.heading ?? null,
+      domainEvidence: domain.reason,
       entry: suggestEntry(profile),
     });
   }
@@ -245,11 +266,12 @@ export async function findGaps(profile, options = {}) {
   return ranked.slice(0, limit);
 }
 
-function describeReason(repo, listnessScore, relevanceScore, analysis) {
+function describeReason(repo, listnessScore, relevanceScore, analysis, domain) {
   const parts = [];
   if (listnessScore >= 60) parts.push("curated list");
   else if (listnessScore >= 25) parts.push("collection");
   if (analysis?.bestSection) parts.push(`section: ${analysis.bestSection.heading}`);
+  if (domain?.overlap?.length) parts.push(`subject: ${domain.overlap.slice(0, 3).join(", ")}`);
   if (relevanceScore >= 50) parts.push("strong topic overlap");
   else if (relevanceScore >= 25) parts.push("topic overlap");
   parts.push(`${repo.stars.toLocaleString("en-US")} stars`);

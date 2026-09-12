@@ -1,20 +1,43 @@
 {
   "name": "stargap",
-  "version": "0.1.3",
-  "description": "Find the high-star GitHub awesome-lists that should mention your project but do not.",
+  "version": "0.2.0",
+  "description": "Score your GitHub repository's discoverability and find high-star awesome lists that should mention it.",
   "type": "module",
-  "bin": { "stargap": "bin/stargap.mjs" },
+  "bin": {
+    "stargap": "bin/stargap.mjs"
+  },
   "main": "src/scan.mjs",
-  "exports": { ".": "./src/scan.mjs" },
-  "files": ["bin", "src", "README.md", "LICENSE"],
+  "exports": {
+    ".": "./src/scan.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "node bin/stargap.mjs",
     "test": "node --test"
   },
-  "engines": { "node": ">=18" },
-  "keywords": ["github", "awesome-list", "growth", "discovery", "marketing", "cli", "oss"],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "github",
+    "awesome-list",
+    "discoverability",
+    "readme",
+    "growth",
+    "discovery",
+    "marketing",
+    "cli",
+    "oss"
+  ],
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/jsxxwhai/stargap.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsxxwhai/stargap.git"
+  },
   "homepage": "https://jsxxwhai.github.io/stargap/"
 }
-

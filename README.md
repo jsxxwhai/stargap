@@ -1,6 +1,6 @@
 # stargap
 
-**Find the high-star GitHub awesome-lists that should mention your project — but don't.**
+**Your repo isn't bad. It's invisible.** Score it out of 100, fix the highest-impact gaps, then find the high-star awesome lists that should mention you — but don't.
 
 > If this saves you a README crawl, [star the repo](https://github.com/jsxxwhai/stargap) so other maintainers can find it.
 
@@ -10,27 +10,43 @@
 
 ![stargap demo](docs/demo.svg)
 
-You shipped something useful. The people who need it are reading an awesome-list that has never heard of you. `stargap` finds those lists, filters out the noise, ranks the real gaps, and gives you a paste-ready entry.
+You shipped something useful. The people who need it never see it. `stargap` scores why, ranks the fixes by points recovered, then finds the high-star lists that should mention you — but don't.
 
 ```console
-$ node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
+$ node bin/stargap.mjs audit astral-sh/ruff
 
-stargap — astral-sh/ruff
-1 high-star repo that could list you but do not yet
+stargap audit — astral-sh/ruff
 
- 1.  51.8     31k  jobbole/awesome-python-cn  curated list, section: 代码分析和 Lint 工具, 30,602 stars
-    Python资源大全中文版，包括：Web框架、网络爬虫、模板引擎、数据库、数据可视化、图片处理等，由「开源前哨」和「Python开发者」微信公号团队维护更新。
+84.2/100  A  1 high-star gap
+
+Positioning  █████████████████░░░  87.5
+README       ████████████████░░░░  80
+Trust        ███████████████████░  95
+Reach        ███████████████░░░░░  78.3
+
+Top fixes
+1. +12 High-star list coverage
+2. +5  Visual proof
+3. +2.4 Specific GitHub topics
+
+Share: https://jsxxwhai.github.io/stargap/?repo=astral-sh%2Fruff
+Badge: stargap audit astral-sh/ruff --badge --out stargap-badge.svg
 ```
 
 One command. No signup, no dashboard, no growth-hacking SaaS.
 
-[Full example report](docs/example-report.md) · [GitHub Action](action.yml)
+[Full example report](docs/example-report.md) · [Audit example](docs/example-audit.md) · [GitHub Action](action.yml)
 
 ## Why this exists
 
-Getting stars is not only a code problem; it is also a distribution problem. A curated list that already ranks well can put your project in front of exactly the right users. Most maintainers never check which lists omit them, because checking by hand means reading hundreds of READMEs.
+Getting stars is not only a code problem; it is also a distribution problem. A great README is invisible until people can find it, and a curated list that already ranks well can put your project in front of exactly the right users.
 
-`stargap` does that reading for you.
+`stargap` gives you two things most maintainers never have time to build:
+
+1. **A 100-point discoverability audit** with 19 explainable checks, concrete evidence and a ranked fix list.
+2. **A verified gap list** of high-star curated lists that have a matching section but do not mention you yet, plus a paste-ready entry.
+
+Both run without an account, a backend or a build step.
 
 ## Quick start
 
@@ -39,31 +55,31 @@ The fastest path is the [browser app](https://jsxxwhai.github.io/stargap/) — n
 For the CLI, run the released version from a shallow clone. Node 18+ and Git are the only requirements:
 
 ```bash
-git clone --depth 1 --branch v0.1.3 https://github.com/jsxxwhai/stargap
+git clone --depth 1 --branch v0.2.0 https://github.com/jsxxwhai/stargap
 cd stargap
-node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
+node bin/stargap.mjs audit astral-sh/ruff
 ```
 
 The archive route works without Git too:
 
 ```bash
-curl -fsSL https://github.com/jsxxwhai/stargap/archive/refs/tags/v0.1.3.tar.gz | tar -xz
-cd stargap-0.1.2
-node bin/stargap.mjs astral-sh/ruff --min-stars 300
+curl -fsSL https://github.com/jsxxwhai/stargap/archive/refs/tags/v0.2.0.tar.gz | tar -xz
+cd stargap-0.2.0
+node bin/stargap.mjs audit astral-sh/ruff
 ```
 
 ```bash
-# A Markdown report you can save and paste into an issue or PR
-node bin/stargap.mjs astral-sh/ruff --markdown --out GAPS.md
+# Score only: positioning, README, trust and reach
+node bin/stargap.mjs audit astral-sh/ruff
 
-# Machine-readable output for your own tooling
-node bin/stargap.mjs astral-sh/ruff --json
+# Markdown audit report for an issue, PR or release note
+node bin/stargap.mjs audit astral-sh/ruff --markdown --out AUDIT.md
 
-# Only consider big lists
-node bin/stargap.mjs astral-sh/ruff --min-stars 1000
+# Generate a README badge
+node bin/stargap.mjs audit astral-sh/ruff --badge --out stargap-badge.svg
 
-# Target a specific ecosystem
-node bin/stargap.mjs astral-sh/ruff --query "awesome in:name rust cli"
+# Find missing curated lists and get paste-ready entries
+node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
 ```
 
 Once the package is published to npm, `npx stargap <owner/repo>` will be the shortest path. The clone and archive commands above are verified today.
@@ -78,6 +94,47 @@ node bin/stargap.mjs doctor   # shows remaining budget
 ```
 
 Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `node bin/stargap.mjs cache` clears it.
+
+## The 100-point discoverability audit
+
+`stargap audit <owner/repo>` scores four things that decide whether a visitor stars, installs or scrolls past:
+
+| Dimension | Points | What it checks |
+|---|---:|---|
+| Positioning | 25 | description, topics, homepage, one-paragraph pitch, searchable name |
+| README | 25 | substance, install path, runnable example, visual proof, scannable structure |
+| Trust | 20 | license, visible CI, contribution path, security path, recent activity |
+| Reach | 30 | stars, high-star list coverage, channel count, curated-list fit |
+
+Every check returns evidence and a concrete fix. The result is explainable, deterministic and works on any public repository.
+
+```console
+$ node bin/stargap.mjs audit astral-sh/ruff
+
+stargap audit — astral-sh/ruff
+
+88.4/100  A  1 high-star gap
+
+Positioning  ████████████████░░░░  80.6
+README       █████████████████░░░  86.7
+Trust        ███████████████████░  95
+Reach        ████████████████░░░░  82.5
+
+Top fixes
+1. +12 High-star list coverage
+   Get listed in the high-star curated lists that already match your topic; each one is a permanent discovery channel.
+2. +5 Visual proof
+   Add a screenshot, terminal recording, GIF or short video; visual proof is the strongest README conversion lever.
+
+Share: https://jsxxwhai.github.io/stargap/?repo=astral-sh%2Fruff
+Badge: stargap audit astral-sh/ruff --badge --out stargap-badge.svg
+```
+
+Use `--markdown` for an issue or release note, `--json` for automation, and `--badge` for a README badge:
+
+```markdown
+[![stargap score 88.4/100 A](https://img.shields.io/badge/stargap-88.4%2F100%20A-2ea44f)](https://jsxxwhai.github.io/stargap/?repo=astral-sh%2Fruff)
+```
 
 ## What it actually does
 
@@ -119,7 +176,7 @@ Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly f
 
 ## Using the results well
 
-`stargap` tells you where you are missing. It does **not** open PRs for you — deliberately. Run it with the GitHub command above, or use the browser app.
+`stargap` tells you where you are missing. It does **not** open PRs for you — deliberately. Use the command above, or the browser app.
 
 - Read each list's `CONTRIBUTING.md` and follow it exactly.
 - Open **one PR per list**, explain why the entry fits that section, and keep it short.
@@ -131,9 +188,11 @@ The tool is a research aid. The judgment is yours.
 ## Commands
 
 ```text
-stargap <owner/repo> [options]   Find gaps
-stargap doctor                   Show token and rate-limit status
-stargap cache                    Clear the local cache
+stargap <owner/repo> [options]        Find gaps
+stargap audit <owner/repo> [options]  Score discoverability and get fixes
+stargap audit <owner/repo> --badge    Generate an SVG score badge
+stargap doctor                        Show token and rate-limit status
+stargap cache                         Clear the local cache
 ```
 
 | Flag | Default | Meaning |
@@ -143,6 +202,7 @@ stargap cache                    Clear the local cache
 | `--candidates <n>` | `40` | Max candidates inspected |
 | `--query <q>` | auto | Override the generated search |
 | `--markdown` / `--json` | terminal | Output format |
+| `--badge` | off | SVG score badge (audit only) |
 | `--out <file>` | stdout | Write to a file |
 | `--token <token>` | env | GitHub token |
 | `--no-cache` | off | Bypass the cache |
@@ -159,23 +219,28 @@ const gaps = await findGaps(profile, { minStars: 500 });
 
 ## GitHub Action
 
-Run a weekly gap check without installing anything:
+Run the audit every week and keep the result visible without installing anything:
 
 ```yaml
-- uses: jsxxwhai/stargap@v0.1.3
+- uses: jsxxwhai/stargap@v0.2.0
   with:
+    mode: audit
     min-stars: "1000"
     output: stargap-report.md
+    badge-output: stargap-badge.svg
+    fail-under: "70"
 ```
 
-The report path is exposed as `steps.<id>.outputs.report`, and the same report is written to the workflow job summary so it is visible without downloading an artifact. See [examples/stargap.yml](examples/stargap.yml) for a scheduled workflow.
+The report is written to the job summary and exposed as `steps.<id>.outputs.report`. Audit mode also exposes `score`, `grade` and an optional `badge` path. `fail-under` turns the score into a quality gate, while `mode: gaps` keeps the original list-only behavior.
+
+See [examples/stargap.yml](examples/stargap.yml) for a scheduled workflow that opens or updates an issue when the score drops.
 
 ## Development
 
 ```bash
 git clone https://github.com/jsxxwhai/stargap
 cd stargap
-npm test        # 41 tests, no network required
+npm test        # offline test suite, no network required
 ```
 
 Everything is plain ESM with zero runtime dependencies. Tests inject fake `fetch` and search functions, so the suite never touches the network.

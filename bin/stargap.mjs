@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * stargap — find the high-star GitHub awesome-lists that should mention your project but don't.
+ * stargap — find the distribution gaps holding your GitHub project back.
  *
  * Zero dependencies. Node 18+.
  */
@@ -8,7 +8,15 @@
 import { parseArgs } from "node:util";
 import { readFile, writeFile } from "node:fs/promises";
 import { loadRepoProfile, findGaps } from "../src/scan.mjs";
-import { renderJson, renderMarkdown, renderTerminal } from "../src/report.mjs";
+import {
+  renderAuditJson,
+  renderAuditMarkdown,
+  renderAuditTerminal,
+  renderJson,
+  renderMarkdown,
+  renderTerminal,
+} from "../src/report.mjs";
+import { auditRepo, renderBadge } from "../src/audit.mjs";
 import { rateLimit } from "../src/github.mjs";
 import { cacheDir, createCache } from "../src/cache.mjs";
 
@@ -17,12 +25,12 @@ const packageJson = JSON.parse(
 );
 const VERSION = packageJson.version;
 
-const HELP = `stargap ${VERSION} — find the high-star GitHub awesome-lists that should mention you
+const HELP = `stargap ${VERSION} — find the distribution gaps holding your GitHub project back
 
 Usage
-  stargap <owner/repo> [options]
-  stargap <owner/repo> --markdown --out GAPS.md
-  stargap <owner/repo> --json
+  stargap <owner/repo> [options]              Find awesome-list gaps
+  stargap audit <owner/repo> [options]        Score discoverability and get fixes
+  stargap audit <owner/repo> --badge          Write an SVG score badge
   stargap doctor
   stargap cache
 
@@ -33,6 +41,7 @@ Options
   --candidates <n>   Max search hits to inspect (default: 40)
   --markdown         Output a Markdown report
   --json             Output JSON
+  --badge            Output an SVG score badge (audit only)
   --out <file>       Write output to a file instead of stdout
   --token <token>    GitHub token (or set GITHUB_TOKEN / GH_TOKEN)
   --no-cache         Bypass the on-disk cache
@@ -46,8 +55,10 @@ Why a token?
 
 Examples
   npx stargap acme/widget
+  stargap audit acme/widget
+  stargap audit acme/widget --markdown --out AUDIT.md
+  stargap audit acme/widget --badge --out stargap-badge.svg
   stargap acme/widget --min-stars 500 --limit 10
-  stargap acme/widget --query "awesome in:name cli" --markdown --out GAPS.md
 `;
 
 function parse(argv) {
@@ -61,6 +72,7 @@ function parse(argv) {
       candidates: { type: "string" },
       markdown: { type: "boolean", default: false },
       json: { type: "boolean", default: false },
+      badge: { type: "boolean", default: false },
       out: { type: "string" },
       token: { type: "string" },
       "no-cache": { type: "boolean", default: false },
@@ -81,6 +93,33 @@ function toInt(value, fallback, name) {
   return parsed;
 }
 
+function assertRepo(fullName) {
+  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(fullName ?? "")) {
+    throw new Error(`expected <owner/repo>, got "${fullName ?? ""}"`);
+  }
+  return fullName;
+}
+
+function scanOptions(values, searchOptions) {
+  return {
+    query: values.query,
+    minStars: toInt(values["min-stars"], 100, "min-stars"),
+    limit: toInt(values.limit, 20, "limit"),
+    candidates: toInt(values.candidates, 40, "candidates"),
+    searchOptions,
+  };
+}
+
+async function writeOutput(output, values, progress) {
+  const body = output.endsWith("\n") ? output : `${output}\n`;
+  if (values.out) {
+    await writeFile(values.out, body, "utf8");
+    progress(`wrote ${values.out}`);
+  } else {
+    console.log(body.trimEnd());
+  }
+}
+
 async function main(argv) {
   const { values, positionals } = parse(argv);
 
@@ -96,6 +135,7 @@ async function main(argv) {
   const token = values.token ?? process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? "";
   const cache = createCache({ enabled: !values["no-cache"] });
   const searchOptions = { token, cache };
+  const progress = values.quiet ? () => {} : (message) => console.error(`· ${message}`);
 
   if (positionals[0] === "doctor") {
     const limits = await rateLimit(searchOptions);
@@ -115,26 +155,30 @@ async function main(argv) {
     return 0;
   }
 
-  const fullName = positionals[0];
-  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(fullName)) {
-    throw new Error(`expected <owner/repo>, got "${fullName}"`);
+  if (positionals[0] === "audit") {
+    const fullName = assertRepo(positionals[1]);
+    progress(`loading ${fullName}`);
+    const profile = await loadRepoProfile(fullName, searchOptions);
+    progress(`extracted ${profile.keywords.length} keywords`);
+    const gaps = await findGaps(profile, { ...scanOptions(values, searchOptions), onProgress: progress });
+    const result = auditRepo(profile, profile.readme, gaps);
+    const output = values.badge
+      ? renderBadge(result)
+      : values.json
+        ? renderAuditJson(result)
+        : values.markdown
+          ? renderAuditMarkdown(result)
+          : renderAuditTerminal(result);
+    await writeOutput(output, values, progress);
+    return 0;
   }
 
-  const progress = values.quiet ? () => {} : (message) => console.error(`· ${message}`);
-
+  const fullName = assertRepo(positionals[0]);
   progress(`loading ${fullName}`);
   const profile = await loadRepoProfile(fullName, searchOptions);
   progress(`extracted ${profile.keywords.length} keywords`);
 
-  const gaps = await findGaps(profile, {
-    query: values.query,
-    minStars: toInt(values["min-stars"], 100, "min-stars"),
-    limit: toInt(values.limit, 20, "limit"),
-    candidates: toInt(values.candidates, 40, "candidates"),
-    searchOptions,
-    onProgress: progress,
-  });
-
+  const gaps = await findGaps(profile, { ...scanOptions(values, searchOptions), onProgress: progress });
   profile.query = values.query ?? null;
 
   const output = values.json
@@ -142,13 +186,7 @@ async function main(argv) {
     : values.markdown
       ? renderMarkdown(profile, gaps)
       : renderTerminal(profile, gaps);
-
-  if (values.out) {
-    await writeFile(values.out, output + "\n", "utf8");
-    progress(`wrote ${values.out}`);
-  } else {
-    console.log(output);
-  }
+  await writeOutput(output, values, progress);
   return 0;
 }
 

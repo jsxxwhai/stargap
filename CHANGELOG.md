@@ -4,6 +4,22 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-12
+
+### Added
+
+- A 100-point discoverability audit with 19 explainable checks across positioning, README, trust and reach.
+- `stargap audit <owner/repo>` with terminal, Markdown, JSON and SVG badge output.
+- Ranked, points-based fixes and a shareable score card with a Shields.io README badge.
+- GitHub Action `mode: audit`, `score`, `grade`, `badge-output` and `fail-under` outputs.
+- A weekly audit workflow example that opens or updates a labeled issue.
+
+### Changed
+
+- The browser app now leads with the discoverability score and shows the top fixes before the curated-list gaps.
+- README positioning and launch plan now center the "your repo is not bad, it is invisible" promise.
+
+
 ## [0.1.3] - 2026-09-12
 
 ### Added
@@ -46,7 +62,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Composite GitHub Action and scheduled workflow example.
 - 33 offline tests covering matching, scanning, caching, rate limits and rendering.
 
-[Unreleased]: https://github.com/jsxxwhai/stargap/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/jsxxwhai/stargap/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/jsxxwhai/stargap/compare/v0.1.3...v0.2.0
 [0.1.2]: https://github.com/jsxxwhai/stargap/compare/v0.1.1...v0.1.3
 [0.1.1]: https://github.com/jsxxwhai/stargap/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jsxxwhai/stargap/releases/tag/v0.1.0

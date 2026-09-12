@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>stargap — find where your project is missing</title>
-<meta name="description" content="Find the high-star GitHub awesome lists that should mention your project but do not. No install, runs in your browser.">
+<title>stargap — score your GitHub repo’s discoverability</title>
+<meta name="description" content="Score your GitHub repository out of 100, get ranked fixes, and find high-star awesome lists that should mention it. No install; runs in your browser.">
 <meta name="robots" content="index,follow">
 <meta name="theme-color" content="#080b14">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="stargap">
-<meta property="og:title" content="stargap — find where your project is missing">
-<meta property="og:description" content="Search high-star awesome lists, verify real topic sections, and see where your project is missing.">
+<meta property="og:title" content="stargap — score your GitHub repo’s discoverability">
+<meta property="og:description" content="Get a 100-point discoverability score, ranked fixes, and verified high-star list gaps in 30 seconds.">
 <meta property="og:url" content="https://jsxxwhai.github.io/stargap/">
 <meta property="og:image" content="https://jsxxwhai.github.io/stargap/social-card.png">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="stargap — find where your project is missing">
-<meta name="twitter:description" content="Find the high-star awesome lists that should mention your project — but don't.">
+<meta name="twitter:title" content="stargap — score your GitHub repo’s discoverability">
+<meta name="twitter:description" content="Your repo isn't bad. It's invisible. Score it, fix it, and find the lists that should mention it.">
 <meta name="twitter:image" content="https://jsxxwhai.github.io/stargap/social-card.png">
 <link rel="canonical" href="https://jsxxwhai.github.io/stargap/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>★</text></svg>">
@@ -32,7 +32,7 @@ h1{font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.045em;margin
 .lede{font-size:20px;color:#b7c4d9;max-width:700px;margin:0 0 32px}.lede strong{color:var(--text)}
 .search{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:16px;box-shadow:0 22px 70px #0007;max-width:760px}.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;padding:12px 14px}.search input::placeholder{color:#65748d}
 button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100deg,#22d3ee,#818cf8);color:#07111f;font:700 15px ui-sans-serif,system-ui,sans-serif;padding:12px 18px;white-space:nowrap}button:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:wait}
-.hint{color:var(--muted);font-size:13px;margin-top:12px}.hint code{color:#cbd5e1}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:52px}.card{background:linear-gradient(180deg,#121b2c,#0d1422);border:1px solid var(--line);border-radius:18px;padding:22px}.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 16px}.terminal{font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:180px;color:#cbd5e1}.terminal .cmd{color:var(--violet)}.terminal .ok{color:var(--green)}.terminal .warn{color:var(--amber)}.terminal .dim{color:var(--muted)}.terminal .link{color:var(--cyan)}.terminal .gap{color:#dbeafe}.terminal a{color:var(--cyan)}.share[hidden]{display:none}.share{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}.share button,.share a{background:#16233a;border:1px solid var(--line);color:#cbd5e1;border-radius:9px;padding:8px 12px;font:600 13px ui-sans-serif,system-ui,sans-serif;text-decoration:none;cursor:pointer}.share button:hover,.share a:hover{border-color:var(--cyan);color:var(--text)}
+.hint{color:var(--muted);font-size:13px;margin-top:12px}.hint code{color:#cbd5e1}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:52px}.card{background:linear-gradient(180deg,#121b2c,#0d1422);border:1px solid var(--line);border-radius:18px;padding:22px}.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 16px}.terminal{font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:180px;color:#cbd5e1}.terminal .cmd{color:var(--violet)}.terminal .ok{color:var(--green)}.terminal .warn{color:var(--amber)}.terminal .dim{color:var(--muted)}.terminal .link{color:var(--cyan)}.terminal .gap{color:#dbeafe}.terminal a{color:var(--cyan)}.score-head{display:flex;align-items:center;gap:14px;margin:2px 0 10px}.score-ring{--grade:#2ea44f;width:76px;height:76px;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle,#0b1220 58%,transparent 60%),conic-gradient(var(--grade) 0 76%,#26334d 76% 100%);border:1px solid #334155;flex:0 0 auto}.score-ring b{font-size:22px;line-height:1}.score-ring span{font-size:10px;color:var(--muted)}.score-grade{font-weight:800;font-size:18px;letter-spacing:-.01em}.score-note{margin:10px 0 14px}.dim-row{display:grid;grid-template-columns:92px 1fr 44px;gap:10px;align-items:center;margin:7px 0;font-size:13px;color:#cbd5e1}.dim-row i{display:block;height:7px;border-radius:999px;background:#1e2a42;overflow:hidden}.dim-row i b{display:block;height:100%;border-radius:inherit}.dim-row em{font-style:normal;color:var(--muted);text-align:right}.fixes-title{margin:18px 0 8px;font-weight:750;color:var(--text)}.fix{display:grid;grid-template-columns:44px minmax(120px,auto) 1fr;gap:8px;align-items:baseline;padding:8px 0;border-top:1px solid #1e293b;font-size:13px}.fix-points{color:var(--green);font-weight:750}.fix b{color:#e2e8f0}.fix .dim{font-size:12px}.gap-row{padding:9px 0;border-top:1px solid #1e293b;font-size:13px}.gap-row .warn{font-weight:750}.gap-row .dim{font-size:12px;margin-top:3px}@media(max-width:520px){.fix{grid-template-columns:44px 1fr}.fix .dim{grid-column:2}.dim-row{grid-template-columns:74px 1fr 38px}}.share[hidden]{display:none}.share{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}.share button,.share a{background:#16233a;border:1px solid var(--line);color:#cbd5e1;border-radius:9px;padding:8px 12px;font:600 13px ui-sans-serif,system-ui,sans-serif;text-decoration:none;cursor:pointer}.share button:hover,.share a:hover{border-color:var(--cyan);color:var(--text)}
 .steps{list-style:none;padding:0;margin:0}.steps li{display:flex;gap:12px;margin-bottom:15px;color:#b7c4d9}.steps b{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#1e2a42;color:var(--cyan);font-size:12px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.feature{background:#0d1422aa;border:1px solid var(--line);border-radius:14px;padding:16px}.feature b{display:block;color:var(--text);margin-bottom:5px}.feature span{color:var(--muted);font-size:14px}.foot{margin-top:48px;color:#65748d;font-size:13px}.error{color:var(--red)}
 @media(max-width:760px){.top{margin-bottom:42px}nav{display:none}.search{flex-direction:column}.grid,.features{grid-template-columns:1fr}.hero{margin-top:18px}}
 </style>
@@ -45,11 +45,11 @@ button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100
 </header>
 <section class="hero">
   <div class="kicker">free · zero dependencies · no signup</div>
-  <h1>Find the lists that should mention <em>your project</em>.</h1>
-  <p class="lede">stargap searches high-star awesome lists, verifies that they have a matching topic section, and tells you where your project is <strong>still missing</strong>. Runs entirely in your browser.</p>
+  <h1>Your repo isn't bad. It's <em>invisible</em>.</h1>
+  <p class="lede">Score your repository in 30 seconds, see the exact discoverability gaps, and get the highest-impact fixes. Then find the high-star lists that should mention you but <strong>still don't</strong>.</p>
   <form class="search" id="form">
     <input id="repo" autocomplete="off" spellcheck="false" placeholder="owner/repo, e.g. astral-sh/ruff" aria-label="GitHub repository">
-    <button id="run" type="submit">Find gaps →</button>
+    <button id="run" type="submit">Audit my repo →</button>
   </form>
   <p class="hint">Runs entirely in your browser. GitHub anonymous limits may apply; paste a <code>read-only token</code> below for larger scans.</p>
   <input id="token" type="password" autocomplete="off" placeholder="Optional GitHub token (stored only in this tab)" style="margin-top:10px;width:min(760px,100%);background:#101827;border:1px solid #26334d;border-radius:10px;color:#e7edf8;padding:10px 12px;font:13px ui-monospace,monospace">
@@ -57,23 +57,23 @@ button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100
 <section class="grid">
   <div class="card">
     <h2>Live result</h2>
-    <div class="terminal" id="output"><span class="dim">Enter a repository to see its distribution gaps.</span></div>
-    <div class="share" id="share" hidden><button type="button" id="copy-link">Copy result link</button><a id="share-x" target="_blank" rel="noopener">Share on X</a><a id="share-hn" target="_blank" rel="noopener">Post to HN</a></div>
+    <div class="terminal" id="output"><span class="dim">Enter a repository to get its discoverability score.</span></div>
+    <div class="share" id="share" hidden><button type="button" id="copy-link">Copy result link</button><button type="button" id="copy-badge">Copy README badge</button><a id="share-x" target="_blank" rel="noopener">Share score</a><a id="share-hn" target="_blank" rel="noopener">Post to HN</a></div>
   </div>
   <div class="card">
     <h2>How it works</h2>
     <ol class="steps">
-      <li><b>1</b><span>Reads your topics, description and README.</span></li>
-      <li><b>2</b><span>Searches high-star curated lists in your category.</span></li>
-      <li><b>3</b><span>Requires a real matching section and checks for an existing entry.</span></li>
-      <li><b>4</b><span>Ranks the remaining gaps by relevance, list quality and reach.</span></li>
+      <li><b>1</b><span>Scores positioning, README, trust and reach out of 100.</span></li>
+      <li><b>2</b><span>Shows the top fixes ranked by points recovered.</span></li>
+      <li><b>3</b><span>Searches high-star curated lists in your category.</span></li>
+      <li><b>4</b><span>Requires a real matching section and checks for an existing entry.</span></li>
     </ol>
     <p class="hint">Precision over volume: a bare <code>Tools</code> heading is not a match.</p>
   </div>
 </section>
 <div class="features">
   <div class="feature"><b>Zero dependencies</b><span>The CLI is plain ESM and Node 18+. The web app has no backend.</span></div>
-  <div class="feature"><b>Paste-ready output</b><span>Each result includes a Markdown entry you can adapt for a PR.</span></div>
+  <div class="feature"><b>Shareable score</b><span>Get a README badge and a direct link to your score card.</span></div>
   <div class="feature"><b>Honest limits</b><span>Heuristics, not magic. False positives become regression tests.</span></div>
 </div>
 <p class="foot">MIT licensed · built for maintainers who would rather earn attention than spam for it. <a href="https://github.com/jsxxwhai/stargap">Star stargap on GitHub</a> if it saves you a README crawl.</p>
@@ -89,8 +89,28 @@ const share = $("share");
 const copyLink = $("copy-link");
 const shareX = $("share-x");
 const shareHn = $("share-hn");
+const copyBadge = $("copy-badge");
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const say = (html) => { output.innerHTML = html; };
+const auditOutput = (result, gaps) => {
+  const color = gradeColor(result.grade);
+  let html = '<div class="score-head"><div class="score-ring" style="--grade:' + color + '"><b>' + esc(result.score) + '</b><span>/100</span></div><div><div class="score-grade" style="color:' + color + '">' + esc(result.grade) + ' discoverability</div><div class="dim">' + esc(result.repo) + ' · ' + esc(result.stars.toLocaleString()) + ' stars</div></div></div>';
+  html += '<div class="dim score-note">Scored on positioning, README conversion, trust and distribution reach.</div>';
+  for (const d of result.dimensions) html += '<div class="dim-row"><span>' + esc(d.name) + '</span><i><b style="width:' + d.score + '%;background:' + color + '"></b></i><em>' + esc(d.score) + '</em></div>';
+  if (result.fixes.length) {
+    html += '<div class="fixes-title">Top fixes</div>';
+    for (const f of result.fixes) html += '<div class="fix"><span class="fix-points">+' + esc(f.points) + '</span><b>' + esc(f.label) + '</b><span class="dim">' + esc(f.advice) + '</span></div>';
+  } else {
+    html += '<div class="ok">No obvious gaps. Keep shipping and keep the README current.</div>';
+  }
+  html += '<div class="fixes-title">Distribution gaps</div>';
+  if (!gaps.length) {
+    html += '<div class="dim">No confirmed high-star list gaps in this run.</div>';
+  } else {
+    html += '<div class="ok">' + gaps.length + ' high-star ' + (gaps.length === 1 ? 'repo' : 'repos') + ' that could list you but do not yet</div>';
+    gaps.slice(0, 5).forEach((g, i) => { html += '<div class="gap-row"><span class="warn">' + (i + 1) + '. ' + g.score + '</span> <b>' + starText(g.stars) + '</b> <a class="link" href="' + esc(g.url) + '" target="_blank" rel="noopener">' + esc(g.fullName) + '</a><div class="dim">section: ' + esc(g.section) + '</div></div>'; });
+  }
+  return html;
+};const say = (html) => { output.innerHTML = html; };
 const api = async (path, token) => {
   const res = await fetch("https://api.github.com" + path, { headers: { Accept: "application/vnd.github+json", ...(token ? { Authorization: "Bearer " + token } : {}) } });
   if (!res.ok) {
@@ -112,11 +132,25 @@ const parts = (s) => String(s).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#]+/u)
 const atomic = (a,b) => { if(a===b)return true; if(generic.has(a)||generic.has(b)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(a)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(b))return false; const [s,l]=a.length<=b.length?[a,b]:[b,a]; return s.length>=4&&(l.startsWith(s)||l.endsWith(s)); };
 const matches = (a,b) => { if(!a||!b)return false; if(a===b)return true; if(!/^[a-z0-9][a-z0-9+#.-]*$/.test(a)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(b))return false; const pa=parts(a),pb=parts(b); if(pa.length===1&&pb.length===1)return atomic(a,b); const sa=pa.filter((x)=>!generic.has(x)),sb=pb.filter((x)=>!generic.has(x)); if(!sa.length||!sb.length)return false; const [need,have]=sa.length>=sb.length?[sa,sb]:[sb,sa]; return need.every((x)=>have.some((y)=>atomic(x,y))); };
 const weak = new Set(["cli","github","oss","distribution","awesome","awesome-list"]);
+const broad = new Set(["javascript","typescript","nodejs","node","python","rust","golang","go","java","php","ruby","swift","kotlin","c","cpp","dotnet","linux","windows","macos","web","frontend","backend"]);
+const domainWords = (value) => tokens(value).flatMap((x) => [x, ...String(x).split(/[^a-z0-9\u4e00-\u9fff+#]+/u)]).filter((x, i, all) => all.indexOf(x) === i).filter((x) => !generic.has(x) && x !== "awesome" && x !== "list" && x !== "lists" && x !== "github");
+const NON_DIRECTORY=/\b(interview|questions?|answers?|jobs?|hiring|career|tutorials?|courses?|books?|learning|roadmap|cheatsheet|blog)\b/i;
+const domainEvidence = (repo, targetKeywords) => {
+  if (NON_DIRECTORY.test(repo.full_name + " " + (repo.name || "") + " " + (repo.description || ""))) return { ok: false, overlap: [] };
+  const subject = new Set(domainWords([repo.full_name, repo.name || "", repo.description || "", ...(repo.topics || [])].join(" ")));
+  const target = new Set(domainWords(targetKeywords.map((x) => x.keyword).join(" ")));
+  const overlap = [...subject].filter((x) => target.has(x));
+  const meta = /\b(awesome-awesome|awesome lists?|list of awesome|meta)\b/i.test(repo.full_name + " " + (repo.description || ""));
+  return { ok: overlap.length > 0 || !subject.size || meta, overlap };
+};
 const headingTokens = (h) => { const words=String(h).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#.-]+/u).filter((x)=>x.length>=2); const big=[]; for(let i=0;i<words.length-1;i++)big.push(words[i]+"-"+words[i+1]); return [...words,...big]; };
 const NON=/^(contents?|table of contents|toc|index|about|license|contributing|acknowledg|credits?|sponsors?|backers?|faq|changelog|roadmap|install|installation|usage|getting started|run one now|check out|star history|support|community|related|see also|links?|resources?|more|other|misc|appendix|footnotes?|disclaimer|thanks|why|how to|examples?|demos?|screenshots?|features?|news|updates?|contact|security|privacy|terms)/i;
+const NON_ENTRY=/(?:\b(?:interviews?|questions?|answers?|quiz|exercises?|learning|references?|tutorials?|articles?|posts?|blogs?|books?|ebooks?|videos?|courses?|talks?|podcasts?|cheatsheets?|roadmaps?|meta|newsletters?)\b|\bawesome\b[^\n]{0,40}\blists?\b|\blists?\s+of\s+lists?\b)/i;
 const clean = (h) => String(h).replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{2BFF}\u{FE0F}\u{2700}-\u{27BF}]/gu,"").replace(/\[[^\]]*\]\([^)]*\)/g," ").replace(/https?:\/\/\S+/g," ").replace(/[*_`#]/g,"").replace(/\s+/g," ").trim();
-const isTopic = (h) => { const c=clean(h); return c.length>=3&&c.length<=60&&!NON.test(c)&&c.split(/\s+/).length<=7&&/[a-z\u4e00-\u9fff]/i.test(c); };
+const isTopic = (h) => { const c=clean(h); return c.length>=3&&c.length<=60&&!NON.test(c)&&!NON_ENTRY.test(c)&&c.split(/\s+/).length<=7&&/[a-z\u4e00-\u9fff]/i.test(c); };
 const starText = (n) => n>=1000?(n/1000).toFixed(n>=10000?0:1)+"k":String(n);
+import { auditRepo, gradeColor } from "./audit.mjs";
+let latestAudit = null;
 async function scan(fullName, token) {
   share.hidden = true;
   say('<span class="dim">Loading profile…</span>');
@@ -150,23 +184,27 @@ async function scan(fullName, token) {
     if(links<15||bullets<10)continue;
     const heads=[...text.matchAll(/^#{2,4}\s+(.+)$/gm)].map((m)=>m[1].trim()).filter(isTopic);
     let best=null;
-    for(const h of heads){const ht=headingTokens(clean(h));for(const item of identityKeywords){if(generic.has(item.keyword)||weak.has(item.keyword))continue;if(ht.some((t)=>matches(item.keyword,t))){if(!best||item.score>best.score)best={heading:clean(h),score:item.score};}}}
+    for(const h of heads){const ht=headingTokens(clean(h));for(const item of identityKeywords){if(generic.has(item.keyword)||weak.has(item.keyword)||broad.has(item.keyword))continue;if(ht.some((t)=>matches(item.keyword,t))){if(!best||item.score>best.score)best={heading:clean(h),score:item.score};}}}
     if(!best)continue;
+    const domain = domainEvidence(r, identityKeywords);
+    if(!domain.ok)continue;
     const starPart=Math.min(100,Math.log10(Math.max(r.stargazers_count,1)+1)*18), score=Math.round(Math.min(100,(best.score*0.5+listness*0.25+starPart*0.25))*10)/10;
-    gaps.push({fullName:r.full_name,stars:r.stargazers_count,description:r.description||"",section:best.heading,score,url:r.html_url});
+    gaps.push({fullName:r.full_name,stars:r.stargazers_count,description:r.description||"",section:best.heading,subject:domain.overlap.slice(0,3).join(", "),score,url:r.html_url});
   }
   gaps.sort((a,b)=>b.score-a.score||b.stars-a.stars);
-  if(!gaps.length){say('<span class="ok">0 gaps found.</span>\n\nNo high-star curated list matched a genuine topic section. Try a repo with more GitHub topics.');return;}
+  const audit = auditRepo({ fullName: repo.full_name, name: repo.name, description: repo.description || "", topics: repo.topics || [], homepage: repo.homepage || "", license: repo.license || null, stars: repo.stargazers_count || 0, pushedAt: repo.pushed_at || null, updatedAt: repo.updated_at || null }, readme, gaps);
+  latestAudit = audit;
   const shareUrl = location.origin + location.pathname + "?repo=" + encodeURIComponent(fullName);
   history.replaceState(null, "", shareUrl);
-  const text = "stargap found " + gaps.length + " high-star awesome lists missing " + fullName + ". Check where your project is missing:";
+  const text = "I scored " + fullName + " at " + audit.score + "/100 (" + audit.grade + ") for OSS discoverability. Find your repo's distribution gaps:";
   copyLink.onclick = async () => { try { await navigator.clipboard.writeText(shareUrl); copyLink.textContent = "Copied!"; setTimeout(()=>copyLink.textContent="Copy result link",1500); } catch { copyLink.textContent = "Copy failed"; } };
+  copyBadge.onclick = async () => { try { await navigator.clipboard.writeText(audit.share.badge); copyBadge.textContent = "Badge copied!"; setTimeout(()=>copyBadge.textContent="Copy README badge",1500); } catch { copyBadge.textContent = "Copy failed"; } };
   shareX.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(shareUrl);
-  shareHn.href = "https://news.ycombinator.com/submitlink?u=" + encodeURIComponent(shareUrl) + "&t=" + encodeURIComponent("stargap — find where your project is missing");
+  shareHn.href = "https://news.ycombinator.com/submitlink?u=" + encodeURIComponent(shareUrl) + "&t=" + encodeURIComponent("stargap — score your repo's discoverability");
   share.hidden = false;
-  let html='<span class="ok">'+gaps.length+' high-star '+(gaps.length===1?'repo':'repos')+' that could list you but do not yet</span>\n\n';
-  gaps.slice(0,10).forEach((g,i)=>{html+='<span class="warn">'+(i+1)+'. '+g.score+'</span>  <b>'+starText(g.stars)+'</b>  <a class="link" href="'+esc(g.url)+'" target="_blank" rel="noopener">'+esc(g.fullName)+'</a>\n    section: '+esc(g.section)+'\n';if(g.description)html+='    <span class="dim">'+esc(g.description.slice(0,120))+'</span>\n';html+='\n';});
-  html+='<span class="dim">Next: run the CLI for Markdown and JSON output.</span>';
+  let html=auditOutput(audit,gaps);
+
+  html+='<div class="dim score-note">Next: run the CLI for Markdown, JSON and automated audit reports.</div>';
   say(html);
 }
 form.addEventListener("submit", async (e)=>{e.preventDefault();const full=repoInput.value.trim().replace(/^https?:\/\/github\.com\//i,"").replace(/\/$/,"");if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(full)){say('<span class="error">Enter owner/repo, for example astral-sh/ruff.</span>');return;}button.disabled=true;try{await scan(full,tokenInput.value.trim());}catch(err){say('<span class="error">'+esc(err.message)+'</span>');}finally{button.disabled=false;}});

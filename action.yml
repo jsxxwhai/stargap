@@ -1,5 +1,5 @@
 name: stargap
-description: Find high-star awesome lists that should mention your project but do not.
+description: Audit your repository's discoverability and find high-star awesome lists that should mention it.
 author: stargap contributors
 
 inputs:
@@ -7,6 +7,10 @@ inputs:
     description: Target repository in owner/name form. Defaults to the current repository.
     required: false
     default: ""
+  mode:
+    description: "audit scores the repository and produces fixes; gaps only reports missing curated lists."
+    required: false
+    default: audit
   token:
     description: GitHub token used for search and API requests. Defaults to the workflow token.
     required: false
@@ -19,6 +23,10 @@ inputs:
     description: Maximum number of gaps to report.
     required: false
     default: "20"
+  candidates:
+    description: Maximum number of search hits to inspect.
+    required: false
+    default: "40"
   query:
     description: Override the generated GitHub search query.
     required: false
@@ -27,11 +35,28 @@ inputs:
     description: Report path, relative to the workspace.
     required: false
     default: stargap-report.md
+  badge-output:
+    description: Optional SVG badge path. Only available in audit mode.
+    required: false
+    default: ""
+  fail-under:
+    description: Optional score threshold. Audit mode exits non-zero below it.
+    required: false
+    default: ""
 
 outputs:
   report:
     description: Path to the generated Markdown report.
     value: ${{ steps.scan.outputs.report }}
+  score:
+    description: Discoverability score from 0 to 100 (audit mode).
+    value: ${{ steps.scan.outputs.score }}
+  grade:
+    description: Letter grade from F to A+ (audit mode).
+    value: ${{ steps.scan.outputs.grade }}
+  badge:
+    description: Path to the generated SVG badge, when requested.
+    value: ${{ steps.scan.outputs.badge }}
 
 runs:
   using: composite
@@ -40,27 +65,16 @@ runs:
       shell: bash
       env:
         INPUT_REPO: ${{ inputs.repo }}
+        INPUT_MODE: ${{ inputs.mode }}
         INPUT_MIN_STARS: ${{ inputs.min-stars }}
         INPUT_LIMIT: ${{ inputs.limit }}
+        INPUT_CANDIDATES: ${{ inputs.candidates }}
         INPUT_QUERY: ${{ inputs.query }}
         INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_BADGE_OUTPUT: ${{ inputs.badge-output }}
+        INPUT_FAIL_UNDER: ${{ inputs.fail-under }}
         GITHUB_TOKEN: ${{ inputs.token || github.token }}
-      run: |
-        set -euo pipefail
-        repo="${INPUT_REPO:-$GITHUB_REPOSITORY}"
-        args=(--markdown --out "$INPUT_OUTPUT" --min-stars "$INPUT_MIN_STARS" --limit "$INPUT_LIMIT")
-        if [[ -n "$INPUT_QUERY" ]]; then
-          args+=(--query "$INPUT_QUERY")
-        fi
-        node "${{ github.action_path }}/bin/stargap.mjs" "$repo" "${args[@]}"
-        echo "report=$INPUT_OUTPUT" >> "$GITHUB_OUTPUT"
-        if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-          {
-            echo "## stargap report"
-            echo
-            cat "$INPUT_OUTPUT"
-          } >> "$GITHUB_STEP_SUMMARY"
-        fi
+      run: node "${{ github.action_path }}/bin/action.mjs"
 
 branding:
   icon: search

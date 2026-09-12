@@ -69,6 +69,13 @@ export function findMatchingTokens(keyword, repoText) {
 const NON_SECTION = /^(contents?|table of contents|toc|index|about|license|contributing|acknowledg|credits?|sponsors?|backers?|faq|changelog|roadmap|install|installation|usage|getting started|run one now|check out|star history|support|community|related|see also|links?|resources?|more|other|misc|appendix|footnotes?|disclaimer|thanks|why|how to|examples?|demos?|screenshots?|features?|news|updates?|contact|security|privacy|terms)/i;
 
 /**
+ * Sections that contain editorial/learning content rather than a list of
+ * projects. A project can be mentioned in an interview answer or tutorial,
+ * but that is not an awesome-list entry a maintainer can add.
+ */
+const NON_ENTRY_SECTION = /(?:\b(?:interviews?|questions?|answers?|quiz|exercises?|learning|references?|tutorials?|articles?|posts?|blogs?|books?|ebooks?|videos?|courses?|talks?|podcasts?|cheatsheets?|roadmaps?|meta|newsletters?)\b|\bawesome\b[^\n]{0,40}\blists?\b|\blists?\s+of\s+lists?\b)/i;
+
+/**
  * Normalize a heading for matching: strip emoji, badges, markdown links
  * (including their URLs — otherwise a link to python.langchain.com looks
  * like a "Python" section), and formatting noise.
@@ -118,6 +125,7 @@ export function isTopicHeading(heading) {
   const cleaned = cleanHeading(heading);
   if (cleaned.length < 3 || cleaned.length > 60) return false;
   if (NON_SECTION.test(cleaned)) return false;
+  if (NON_ENTRY_SECTION.test(cleaned)) return false;
   if (cleaned.split(/\s+/).length > 7) return false;
   return /[a-z\u4e00-\u9fff]/i.test(cleaned);
 }
@@ -131,6 +139,15 @@ export function analyzeReadme(
   targetKeywords,
   { idf = () => 1, specificThreshold = 0, repoName = "" } = {},
 ) {
+  // Ecosystem words ("javascript", "python", "nodejs") tell us which list to
+  // search, but they are not a topic section on their own: "JavaScript
+  // References", "Node Interview Questions" and "Awesome JavaScript Lists"
+  // are all about JavaScript, yet none is a place to list a runtime/bundler.
+  const broadEcosystem = new Set([
+    "javascript", "typescript", "nodejs", "node", "python", "rust", "golang",
+    "go", "java", "php", "ruby", "swift", "kotlin", "c", "cpp", "dotnet",
+    "linux", "windows", "macos", "web", "frontend", "backend",
+  ]);
   const text = typeof readme === "string" ? readme : "";
   const linkCount = (text.match(/\[[^\]]+\]\([^)]+\)/g) ?? []).length;
   const bulletCount = (text.match(/^\s*[-*+]\s+/gm) ?? []).length;
@@ -150,6 +167,7 @@ export function analyzeReadme(
     (item) =>
       !isGenericTerm(item.keyword) &&
       !isWeakKeyword(item.keyword) &&
+      !broadEcosystem.has(item.keyword) &&
       idf(item.keyword) >= specificThreshold,
   );
   const matchedSections = [];

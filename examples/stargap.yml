@@ -1,4 +1,4 @@
-name: Find awesome-list gaps
+name: Weekly repository audit
 
 on:
   schedule:
@@ -7,19 +7,70 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   stargap:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: jsxxwhai/stargap@v0.1.3
+      - uses: jsxxwhai/stargap@v0.2.0
         id: stargap
         with:
+          mode: audit
           min-stars: "1000"
           limit: "20"
           output: stargap-report.md
+          badge-output: stargap-badge.svg
+          fail-under: "0"
       - uses: actions/upload-artifact@v4
         with:
           name: stargap-report
-          path: ${{ steps.stargap.outputs.report }}
+          path: |
+            ${{ steps.stargap.outputs.report }}
+            ${{ steps.stargap.outputs.badge }}
+      - uses: actions/github-script@v7
+        env:
+          SCORE: ${{ steps.stargap.outputs.score }}
+          GRADE: ${{ steps.stargap.outputs.grade }}
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: 'stargap' });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'stargap',
+                color: '6f42c1',
+                description: 'Repository discoverability audit',
+              });
+            }
+            const report = fs.readFileSync('stargap-report.md', 'utf8');
+            const title = 'stargap discoverability report';
+            const body = `Score: **${process.env.SCORE}/100 (${process.env.GRADE})**\n\n${report}`;
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'stargap',
+            });
+            const existing = issues.find((issue) => issue.title === title);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['stargap'],
+              });
+            }

@@ -188,11 +188,15 @@ export async function fetchRepo(fullName, options = {}) {
 export function normalizeRepo(item) {
   return {
     fullName: item.full_name,
+    name: item.name ?? String(item.full_name ?? "").split("/").pop(),
     stars: item.stargazers_count ?? 0,
     description: item.description ?? "",
     url: item.html_url,
+    homepage: item.homepage ?? "",
+    license: item.license ?? null,
     topics: Array.isArray(item.topics) ? item.topics : [],
     pushedAt: item.pushed_at ?? null,
+    updatedAt: item.updated_at ?? null,
     archived: Boolean(item.archived),
     isFork: Boolean(item.fork),
   };
@@ -205,6 +209,3 @@ export async function rateLimit(options = {}) {
   const { data } = await githubJson("/rate_limit", { ...options, cache: false });
   return data;
 }
-
-
-

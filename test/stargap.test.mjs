@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { extractKeywords, gapScore, listness, mentionOf, relevance, suggestEntry, tokenize } from "../src/keywords.mjs";
 import { buildSearchQuery, findGaps, profileRepo } from "../src/scan.mjs";
+import { domainEvidence, listSubject } from "../src/domain.mjs";
 import { renderJson, renderMarkdown, renderTerminal } from "../src/report.mjs";
 
 test("tokenize lowercases and splits", () => {
@@ -62,6 +63,73 @@ test("buildSearchQuery uses ASCII keywords plus list hints", () => {
   const query = buildSearchQuery(profile);
   assert.match(query, /vector/);
   assert.match(query, /awesome/);
+});
+
+test("domainEvidence rejects editorial repositories, not just unrelated ecosystems", () => {
+  const keywords = [{ keyword: "javascript", score: 10 }, { keyword: "nodejs", score: 10 }];
+  const interviewRepo = {
+    fullName: "someone/Awesome-JavaScript-Interviews",
+    name: "Awesome-JavaScript-Interviews",
+    description: "Popular JavaScript interview questions",
+    topics: ["javascript"],
+  };
+  assert.equal(domainEvidence(keywords, interviewRepo).ok, false);
+});
+
+test("domainEvidence rejects a list from a different ecosystem", () => {
+  const pythonKeywords = [
+    { keyword: "python", score: 10 },
+    { keyword: "linter", score: 10 },
+  ];
+  const rustList = {
+    fullName: "awesome/awesome-rust",
+    name: "awesome-rust",
+    description: "Curated list of Rust resources",
+    topics: ["rust"],
+  };
+  const pythonList = {
+    fullName: "awesome/awesome-python",
+    name: "awesome-python",
+    description: "Curated list of Python resources",
+    topics: ["python"],
+  };
+  assert.equal(domainEvidence(pythonKeywords, rustList).ok, false);
+  assert.equal(domainEvidence(pythonKeywords, pythonList).ok, true);
+  assert.ok(listSubject(pythonList).has("python"));
+});
+
+test("findGaps rejects a section match from an unrelated list domain", async () => {
+  const profile = profileRepo({
+    fullName: "astral-sh/ruff",
+    name: "ruff",
+    description: "An extremely fast Python linter",
+    topics: ["python", "linter"],
+  });
+  const repos = [
+    {
+      fullName: "awesome/awesome-rust",
+      stars: 5000,
+      description: "Curated list of Rust resources",
+      url: "https://github.com/awesome/awesome-rust",
+      topics: ["rust"],
+      pushedAt: null,
+      archived: false,
+      isFork: false,
+    },
+  ];
+  const readme = [
+    "# Awesome Rust",
+    "## Transpilers",
+    ...Array.from({ length: 20 }, (_, i) => `- [Tool ${i}](https://example.com/t${i}) - thing`),
+  ].join("\n");
+  const gaps = await findGaps(profile, {
+    search: async () => repos,
+    readme: async () => readme,
+    minStars: 100,
+    candidates: 10,
+    onProgress: () => {},
+  });
+  assert.equal(gaps.length, 0);
 });
 
 test("findGaps filters out repos that already mention the target", async () => {

@@ -87,6 +87,16 @@ test("isTopicHeading rejects navigation and CTA headings", () => {
   assert.ok(!isTopicHeading("How to contribute to this project today"));
 });
 
+test("non-entry sections are rejected", () => {
+  assert.ok(!isTopicHeading("Most common Node Interview Topics & Questions"));
+  assert.ok(!isTopicHeading("JavaScript References"));
+  assert.ok(!isTopicHeading("Articles & Tutorials"));
+  assert.ok(!isTopicHeading("Awesome JavaScript Lists"));
+  assert.ok(isTopicHeading("Transpilers"));
+  assert.ok(isTopicHeading("NPM"));
+  assert.ok(isTopicHeading("Package Managers"));
+});
+
 test("cleanHeading strips markdown links and their URLs", () => {
   // The bug: a heading linking to python.langchain.com looked like "Python".
   const cleaned = cleanHeading(":star: [Langchain Data Analyst](https://python.langchain.com/docs/tools)");

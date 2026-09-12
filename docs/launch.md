@@ -5,8 +5,8 @@ right maintainers and users see it once, then letting the result compound.
 
 ## Positioning
 
-One sentence: **stargap finds the high-star awesome lists that should mention
-your project but do not.**
+One sentence: **stargap scores why your repository is invisible, then shows
+the exact fixes and high-star lists that should mention it but do not.**
 
 The reader is an OSS maintainer who already shipped something and wants
 distribution. The promise is a ranked, evidence-backed gap list — not a growth
@@ -15,9 +15,9 @@ dashboard and not automated spam.
 ## Before publishing
 
 - [ ] Create the GitHub repository and push `main`.
-- [ ] Add the repository description: "Find the high-star GitHub repos that should mention your project — but don't."
-- [ ] Add topics: `awesome-list`, `github`, `cli`, `oss`, `developer-tools`, `distribution`.
-- [x] Publish `v0.1.3` and attach release notes.
+- [ ] Add the repository description: "Score your repo's discoverability and find the high-star awesome lists that should mention it."
+- [ ] Add topics: `awesome-list`, `github`, `discoverability`, `readme`, `cli`, `oss`, `developer-tools`, `distribution`.
+- [ ] Publish `v0.2.0` and attach release notes.
 - [ ] Publish to npm so the short `npx stargap` form works; until then, document the verified clone/archive commands.
 - [ ] Enable Issues and Discussions; keep Issues enabled so bad-match reports become regression tests.
 
@@ -25,28 +25,29 @@ dashboard and not automated spam.
 
 Title options:
 
-- Show HN: stargap – find the awesome lists that should mention your project
-- I built a tool that finds the awesome-lists missing your project
+- Show HN: stargap – score why your GitHub repo is invisible
+- I built a 30-second discoverability audit for GitHub repos
 
 Post body:
 
-> Awesome-lists are one of the highest-leverage distribution channels for a new
-> OSS project, but checking whether a list already includes you means reading
-> hundreds of READMEs.
+> Your repository probably is not bad. It is invisible. The README does not
+> explain the outcome, the install path takes too long to find, there is no
+> visual proof, and the high-star lists in your category do not mention you.
 >
-> stargap profiles your repo, searches for curated lists in your topic, verifies
-> that each candidate is a real list with a matching section, checks that it
-> does not already mention you, and ranks the gaps by relevance, list-ness and
-> reach. It outputs a paste-ready entry.
+> stargap scores all of that out of 100, returns the exact fixes, then finds the
+> curated lists that should mention you but do not.
 >
-> It is a zero-dependency Node CLI. Clone the release and run it in one line:
+> It is a zero-dependency Node CLI with 19 explainable checks. It also profiles
+> your repo, verifies that each candidate is a real list with a matching
+> section, checks that it does not already mention you, and outputs a paste-ready
+> entry. Clone the release and run it in one line:
 >
 > I deliberately made it precise rather than exhaustive — early versions
 > reported every "Tools" section as a match, so I added full-coverage topic
 > matching and regression tests for the false positives. I would rather return
 > one real gap than fifty noisy ones.
 >
-> `git clone --depth 1 --branch v0.1.3 https://github.com/jsxxwhai/stargap && cd stargap && node bin/stargap.mjs astral-sh/ruff --min-stars 300`
+> `git clone --depth 1 --branch v0.2.0 https://github.com/jsxxwhai/stargap && cd stargap && node bin/stargap.mjs audit astral-sh/ruff`
 >
 > I would love feedback on false positives and false negatives. Those reports
 > are the most useful contribution right now.
@@ -63,7 +64,8 @@ Post body:
 
 ## What converts visitors into stars
 
-- The first screen shows a real terminal result and the exact command.
+- The first screen promises a 30-second score and shows a real result card.
+- The score, badge and ranked fixes are shareable and work as a README badge.
 - The README links to a full example report.
 - The tool does one thing and explains its precision tradeoff.
 - The browser app and the CLI both run with no account and no backend.

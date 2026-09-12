@@ -78,7 +78,7 @@ def draw_brand(draw: ImageDraw.ImageDraw) -> None:
     draw.text((122, 49), "stargap", font=font(FONT_BOLD, 34), fill=(231, 237, 248, 255))
     draw.text(
         (324, 62),
-        "DISTRIBUTION INTELLIGENCE FOR OPEN SOURCE",
+        "DISCOVERABILITY AUDIT FOR OPEN SOURCE",
         font=font(FONT_BOLD, 14),
         fill=(143, 160, 187, 255),
     )
@@ -95,34 +95,34 @@ def main() -> None:
     draw = ImageDraw.Draw(image)
 
     draw_brand(draw)
-    draw.text((64, 132), "Find the lists that should mention", font=font(FONT_BOLD, 52), fill=(231, 237, 248, 255))
-    draw.text((64, 196), "your project", font=font(FONT_BOLD, 52), fill=(103, 232, 249, 255))
-    draw.text((386, 196), "— but don't.", font=font(FONT_BOLD, 52), fill=(231, 237, 248, 255))
+    draw.text((64, 132), "Your repo isn't bad.", font=font(FONT_BOLD, 52), fill=(231, 237, 248, 255))
+    draw.text((64, 196), "It's invisible.", font=font(FONT_BOLD, 52), fill=(103, 232, 249, 255))
+    draw.text((430, 196), "Score it.", font=font(FONT_BOLD, 52), fill=(231, 237, 248, 255))
 
     rounded_panel(draw, (64, 292, 1216, 390), radius=18)
     draw.text((92, 322), "$", font=font(FONT_MONO_BOLD, 24), fill=(167, 139, 250, 255))
     draw.text(
         (126, 320),
-        "npx stargap astral-sh/ruff --min-stars 300",
+        "node bin/stargap.mjs audit astral-sh/ruff",
         font=font(FONT_MONO, 25),
         fill=(203, 213, 225, 255),
     )
     draw.text((1060, 326), "Node 18+", font=font(FONT_MONO, 16), fill=(143, 160, 187, 255))
 
     rounded_panel(draw, (64, 418, 1216, 552), radius=18)
-    draw.text((94, 446), "1", font=font(FONT_BOLD, 26), fill=(251, 191, 36, 255))
-    draw.text((132, 446), "51.8", font=font(FONT_BOLD, 26), fill=(251, 191, 36, 255))
-    draw.text((236, 446), "31k", font=font(FONT_BOLD, 26), fill=(231, 237, 248, 255))
-    draw.text((322, 446), "jobbole/awesome-python-cn", font=font(FONT_BOLD, 26), fill=(103, 232, 249, 255))
+    draw.text((94, 446), "84.2", font=font(FONT_BOLD, 26), fill=(251, 191, 36, 255))
+    draw.text((190, 446), "/100", font=font(FONT_BOLD, 26), fill=(143, 160, 187, 255))
+    draw.text((286, 446), "A", font=font(FONT_BOLD, 26), fill=(52, 211, 153, 255))
+    draw.text((338, 446), "discoverability", font=font(FONT_BOLD, 26), fill=(231, 237, 248, 255))
     draw.text(
         (94, 495),
-        "curated list  ·  section: Static Analysis & Linting  ·  30,602 stars",
+        "19 explainable checks  ·  ranked fixes  ·  verified list gaps",
         font=font(FONT_REGULAR, 20),
         fill=(143, 160, 187, 255),
     )
 
     draw.text((64, 590), "github.com/jsxxwhai/stargap", font=font(FONT_BOLD, 18), fill=(167, 139, 250, 255))
-    draw.text((835, 590), "Star it if it saves you a README crawl", font=font(FONT_REGULAR, 18), fill=(203, 213, 225, 255))
+    draw.text((782, 590), "Star it if it saves you a README crawl", font=font(FONT_REGULAR, 18), fill=(203, 213, 225, 255))
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     image.convert("RGB").save(OUT, "PNG", optimize=True)
