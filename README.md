@@ -2,6 +2,10 @@
 
 **Find the high-star GitHub repos that should mention your project — but don't.**
 
+[![CI](https://github.com/jsxxwhai/stargap/actions/workflows/ci.yml/badge.svg)](https://github.com/jsxxwhai/stargap/actions/workflows/ci.yml) [![release](https://img.shields.io/github/v/release/jsxxwhai/stargap)](https://github.com/jsxxwhai/stargap/releases) [![license](https://img.shields.io/github/license/jsxxwhai/stargap)](LICENSE)
+
+**Try it in your browser → [jsxxwhai.github.io/stargap](https://jsxxwhai.github.io/stargap/)** — no install required.
+
 ![stargap demo](docs/demo.svg)
 
 You shipped something useful. The people who need it are reading an awesome-list that has never heard of you. `stargap` finds those lists, filters out the noise, ranks the real gaps, and gives you a paste-ready entry.

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: jsxxwhai/stargap@v0.1.0
+      - uses: jsxxwhai/stargap@v0.1.1
         id: stargap
         with:
           min-stars: "1000"

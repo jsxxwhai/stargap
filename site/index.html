@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>stargap — find where your project is missing</title>
+<meta name="description" content="Find the high-star GitHub awesome lists that should mention your project but do not. No install, runs in your browser.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>★</text></svg>">
+<style>
+:root{--bg:#080b14;--panel:#101827;--line:#26334d;--text:#e7edf8;--muted:#8fa0bb;--cyan:#67e8f9;--violet:#a78bfa;--amber:#fbbf24;--green:#34d399;--red:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1100px 600px at 75% -10%,#25205a 0,transparent 60%),radial-gradient(800px 500px at -10% 40%,#073344 0,transparent 55%),var(--bg);color:var(--text);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+a{color:var(--cyan)}main{width:min(1080px,calc(100% - 36px));margin:0 auto;padding:42px 0 72px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:64px}.brand{font-weight:800;font-size:22px;letter-spacing:-.02em}.brand span{color:var(--amber)}
+nav a{margin-left:20px;color:var(--muted);text-decoration:none;font-size:14px}nav a:hover{color:var(--text)}
+.hero{max-width:800px}.kicker{display:inline-block;color:var(--cyan);border:1px solid #164e63;background:#082f3a;padding:5px 12px;border-radius:999px;font-size:13px;font-weight:650;margin-bottom:20px}
+h1{font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.045em;margin:0 0 22px;max-width:900px}h1 em{font-style:normal;background:linear-gradient(100deg,var(--cyan),var(--violet) 60%,var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:20px;color:#b7c4d9;max-width:700px;margin:0 0 32px}.lede strong{color:var(--text)}
+.search{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:16px;box-shadow:0 22px 70px #0007;max-width:760px}.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;padding:12px 14px}.search input::placeholder{color:#65748d}
+button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100deg,#22d3ee,#818cf8);color:#07111f;font:700 15px ui-sans-serif,system-ui,sans-serif;padding:12px 18px;white-space:nowrap}button:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:wait}
+.hint{color:var(--muted);font-size:13px;margin-top:12px}.hint code{color:#cbd5e1}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:52px}.card{background:linear-gradient(180deg,#121b2c,#0d1422);border:1px solid var(--line);border-radius:18px;padding:22px}.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 16px}.terminal{font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:180px;color:#cbd5e1}.terminal .cmd{color:var(--violet)}.terminal .ok{color:var(--green)}.terminal .warn{color:var(--amber)}.terminal .dim{color:var(--muted)}.terminal .link{color:var(--cyan)}
+.steps{list-style:none;padding:0;margin:0}.steps li{display:flex;gap:12px;margin-bottom:15px;color:#b7c4d9}.steps b{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#1e2a42;color:var(--cyan);font-size:12px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.feature{background:#0d1422aa;border:1px solid var(--line);border-radius:14px;padding:16px}.feature b{display:block;color:var(--text);margin-bottom:5px}.feature span{color:var(--muted);font-size:14px}.foot{margin-top:48px;color:#65748d;font-size:13px}.error{color:var(--red)}
+@media(max-width:760px){.top{margin-bottom:42px}nav{display:none}.search{flex-direction:column}.grid,.features{grid-template-columns:1fr}.hero{margin-top:18px}}
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+  <div class="brand">★ stargap</div>
+  <nav><a href="https://github.com/jsxxwhai/stargap">GitHub</a><a href="https://github.com/jsxxwhai/stargap/blob/main/docs/example-report.md">Example report</a><a href="https://github.com/jsxxwhai/stargap#quick-start">CLI</a></nav>
+</header>
+<section class="hero">
+  <div class="kicker">distribution intelligence for open source</div>
+  <h1>Find the lists that should mention <em>your project</em>.</h1>
+  <p class="lede">stargap searches high-star awesome lists, verifies that they have a matching topic section, and tells you where your project is <strong>still missing</strong>. Runs entirely in your browser.</p>
+  <form class="search" id="form">
+    <input id="repo" autocomplete="off" spellcheck="false" placeholder="owner/repo, e.g. astral-sh/ruff" aria-label="GitHub repository">
+    <button id="run" type="submit">Find gaps →</button>
+  </form>
+  <p class="hint">No install. No signup. GitHub anonymous limits may apply; paste a <code>read-only token</code> below for larger scans.</p>
+  <input id="token" type="password" autocomplete="off" placeholder="Optional GitHub token (stored only in this tab)" style="margin-top:10px;width:min(760px,100%);background:#101827;border:1px solid #26334d;border-radius:10px;color:#e7edf8;padding:10px 12px;font:13px ui-monospace,monospace">
+</section>
+<section class="grid">
+  <div class="card">
+    <h2>Live result</h2>
+    <div class="terminal" id="output"><span class="dim">Enter a repository to see its distribution gaps.</span></div>
+  </div>
+  <div class="card">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><b>1</b><span>Reads your topics, description and README.</span></li>
+      <li><b>2</b><span>Searches high-star curated lists in your category.</span></li>
+      <li><b>3</b><span>Requires a real matching section and checks for an existing entry.</span></li>
+      <li><b>4</b><span>Ranks the remaining gaps by relevance, list quality and reach.</span></li>
+    </ol>
+    <p class="hint">Precision over volume: a bare <code>Tools</code> heading is not a match.</p>
+  </div>
+</section>
+<div class="features">
+  <div class="feature"><b>Zero dependencies</b><span>The CLI is plain ESM and Node 18+. The web app has no backend.</span></div>
+  <div class="feature"><b>Paste-ready output</b><span>Each result includes a Markdown entry you can adapt for a PR.</span></div>
+  <div class="feature"><b>Honest limits</b><span>Heuristics, not magic. False positives become regression tests.</span></div>
+</div>
+<p class="foot">MIT licensed · built for maintainers who would rather earn attention than spam for it.</p>
+</main>
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const output = $("output");
+const form = $("form");
+const repoInput = $("repo");
+const tokenInput = $("token");
+const button = $("run");
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const say = (html) => { output.innerHTML = html; };
+const api = async (path, token) => {
+  const res = await fetch("https://api.github.com" + path, { headers: { Accept: "application/vnd.github+json", ...(token ? { Authorization: "Bearer " + token } : {}) } });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(res.status === 403 || res.status === 429 ? "GitHub rate limit reached. Add a read-only token above and retry." : "GitHub API " + res.status + (body ? ": " + body.slice(0, 120) : ""));
+  }
+  return res.json();
+};
+const raw = async (fullName) => {
+  for (const name of ["README.md", "readme.md", "Readme.md", "README.rst", "README.txt", "README"]) {
+    const res = await fetch("https://raw.githubusercontent.com/" + fullName + "/HEAD/" + name);
+    if (res.ok) return res.text();
+  }
+  return "";
+};
+const tokens = (text) => String(text).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#.-]+/u).filter((x) => x.length >= 2);
+const generic = new Set("awesome curated collection list lists directory catalog resources resource software library libraries framework frameworks package packages tool tools toolkit utility utilities app apps application applications project projects code development programming language platform system systems service services solution solutions standard miscellaneous various related general other reading writing editing management productivity learning tutorial tutorials guide guides example examples demo demos sample samples tips best top popular useful great good high quality free open source modern simple lightweight powerful extensible cross multi data web mobile desktop cloud server client api file files text image images video audio security testing test tests debug logging monitoring database databases storage network networking docs documentation".split(" "));
+const parts = (s) => String(s).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#]+/u).filter(Boolean);
+const atomic = (a,b) => { if(a===b)return true; if(generic.has(a)||generic.has(b)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(a)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(b))return false; const [s,l]=a.length<=b.length?[a,b]:[b,a]; return s.length>=4&&(l.startsWith(s)||l.endsWith(s)); };
+const matches = (a,b) => { if(!a||!b)return false; if(a===b)return true; if(!/^[a-z0-9][a-z0-9+#.-]*$/.test(a)||!/^[a-z0-9][a-z0-9+#.-]*$/.test(b))return false; const pa=parts(a),pb=parts(b); if(pa.length===1&&pb.length===1)return atomic(a,b); const sa=pa.filter((x)=>!generic.has(x)),sb=pb.filter((x)=>!generic.has(x)); if(!sa.length||!sb.length)return false; const [need,have]=sa.length>=sb.length?[sa,sb]:[sb,sa]; return need.every((x)=>have.some((y)=>atomic(x,y))); };
+const weak = new Set(["cli","github","oss","distribution","awesome","awesome-list"]);
+const headingTokens = (h) => { const words=String(h).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#.-]+/u).filter((x)=>x.length>=2); const big=[]; for(let i=0;i<words.length-1;i++)big.push(words[i]+"-"+words[i+1]); return [...words,...big]; };
+const NON=/^(contents?|table of contents|toc|index|about|license|contributing|acknowledg|credits?|sponsors?|backers?|faq|changelog|roadmap|install|installation|usage|getting started|run one now|check out|star history|support|community|related|see also|links?|resources?|more|other|misc|appendix|footnotes?|disclaimer|thanks|why|how to|examples?|demos?|screenshots?|features?|news|updates?|contact|security|privacy|terms)/i;
+const clean = (h) => String(h).replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{2BFF}\u{FE0F}\u{2700}-\u{27BF}]/gu,"").replace(/\[[^\]]*\]\([^)]*\)/g," ").replace(/https?:\/\/\S+/g," ").replace(/[*_`#]/g,"").replace(/\s+/g," ").trim();
+const isTopic = (h) => { const c=clean(h); return c.length>=3&&c.length<=60&&!NON.test(c)&&c.split(/\s+/).length<=7&&/[a-z\u4e00-\u9fff]/i.test(c); };
+const starText = (n) => n>=1000?(n/1000).toFixed(n>=10000?0:1)+"k":String(n);
+async function scan(fullName, token) {
+  say('<span class="dim">Loading profile…</span>');
+  const repo = await api("/repos/" + fullName, token);
+  const readme = await raw(fullName);
+  const stop = new Set("the a an and or for to of in on with is are that this it as by from your you our we be can will not no but if then than so at into about using use used uses via all any more most other open source free simple fast tiny small new easy based built build make makes just only also very cli tool tools app apps library lib framework project github https http com www readme docs documentation".split(" "));
+  const score = new Map();
+  const bump = (w,weight) => { if(!w||w.length<2||stop.has(w)||/^\d+$/.test(w))return; const e=score.get(w)||{weight:0,count:0}; e.weight=Math.max(e.weight,weight); e.count++; score.set(w,e); };
+  for (const topic of repo.topics||[]) { tokens(topic).forEach((x)=>bump(x,6)); bump(String(topic).toLowerCase().trim(),8); }
+  tokens(repo.name).forEach((x)=>bump(x,4)); tokens(repo.description||"").forEach((x)=>bump(x,3));
+  tokens(readme.slice(0,4000)).forEach((x)=>bump(x,1.5));
+  const kw = [...score.entries()].map(([keyword,e])=>({keyword,score:Math.round(e.weight*(1+Math.min(Math.log2(e.count+1),2))*100)/100})).sort((a,b)=>b.score-a.score||a.keyword.localeCompare(b.keyword));
+  const identityKeywords = (repo.topics||[]).length ? (()=>{const s=new Map();const add=(w,weight)=>{if(!w||w.length<2||stop.has(w)||/^\d+$/.test(w))return;const e=s.get(w)||{weight:0,count:0};e.weight=Math.max(e.weight,weight);e.count++;s.set(w,e)};for(const topic of repo.topics){tokens(topic).forEach((x)=>add(x,6));add(String(topic).toLowerCase().trim(),8)}tokens(repo.name).forEach((x)=>add(x,4));return [...s.entries()].map(([keyword,e])=>({keyword,score:Math.round(e.weight*(1+Math.min(Math.log2(e.count+1),2))*100)/100})).sort((a,b)=>b.score-a.score||a.keyword.localeCompare(b.keyword));})() : kw;
+  const queries=[];
+  const self=new Set([repo.name,...fullName.split("/")].map((x)=>x.toLowerCase()));
+  for(const topic of (repo.topics||[]).map((x)=>x.toLowerCase()).filter((x)=>/^[a-z0-9-]+$/.test(x)&&x.length>=3&&x!=="awesome"&&x!=="awesome-list"&&!generic.has(x)&&!self.has(x))){const q="awesome in:name "+topic;if(!queries.includes(q))queries.push(q);if(queries.length>=4)break;}
+  for(const k of kw){if(queries.length>=4)break;if(!/^[a-z0-9-]+$/.test(k.keyword)||k.keyword.length<3||self.has(k.keyword)||generic.has(k.keyword))continue;const q="awesome in:name "+k.keyword;if(!queries.includes(q))queries.push(q);}
+  if(!queries.length)queries.push("awesome in:name "+repo.name);
+  const found=new Map();
+  for(const q of queries){ say('<span class="dim">Searching </span><span class="cmd">'+esc(q)+'</span>'); try{const data=await api("/search/repositories?q="+encodeURIComponent(q)+"&sort=stars&order=desc&per_page=15",token);for(const x of data.items||[])found.set(x.full_name,x);}catch(e){if(String(e.message).includes("rate limit"))throw e;} }
+  const pool=[...found.values()].sort((a,b)=>b.stargazers_count-a.stargazers_count).slice(0,40);
+  const gaps=[];
+  for(const r of pool){
+    if(r.full_name===fullName||r.archived||r.fork||r.stargazers_count<100)continue;
+    const hay=(r.full_name+" "+(r.description||"")+" "+(r.topics||[]).join(" ")).toLowerCase();
+    let listness=0;if(/(^|[-_/])awesome([-_/]|$)/.test(hay))listness+=60;if(/\b(awesome|curated|collection|list of|resources|directory|catalog|showcase)\b/.test(hay))listness+=25;if(/\b(alternatives|comparison|compare|vs\b|benchmark|landscape)\b/.test(hay))listness+=15;if(/\b(toolkit|ecosystem|guide|cheatsheet|cheat sheet)\b/.test(hay))listness+=10;if(listness<15)continue;
+    say('<span class="dim">Checking </span><span class="link">'+esc(r.full_name)+'</span>');
+    const text=await raw(r.full_name); if(!text)continue;
+    const lower=text.toLowerCase(); if(lower.includes(fullName.toLowerCase())||lower.includes((repo.html_url||"").toLowerCase()))continue;
+    const links=(text.match(/\[[^\]]+\]\([^)]+\)/g)||[]).length, bullets=(text.match(/^\s*[-*+]\s+/gm)||[]).length;
+    if(links<15||bullets<10)continue;
+    const heads=[...text.matchAll(/^#{2,4}\s+(.+)$/gm)].map((m)=>m[1].trim()).filter(isTopic);
+    let best=null;
+    for(const h of heads){const ht=headingTokens(clean(h));for(const item of identityKeywords){if(generic.has(item.keyword)||weak.has(item.keyword))continue;if(ht.some((t)=>matches(item.keyword,t))){if(!best||item.score>best.score)best={heading:clean(h),score:item.score};}}}
+    if(!best)continue;
+    const starPart=Math.min(100,Math.log10(Math.max(r.stargazers_count,1)+1)*18), score=Math.round(Math.min(100,(best.score*0.5+listness*0.25+starPart*0.25))*10)/10;
+    gaps.push({fullName:r.full_name,stars:r.stargazers_count,description:r.description||"",section:best.heading,score,url:r.html_url});
+  }
+  gaps.sort((a,b)=>b.score-a.score||b.stars-a.stars);
+  if(!gaps.length){say('<span class="ok">0 gaps found.</span>\n\nNo high-star curated list matched a genuine topic section. Try a repo with more GitHub topics.');return;}
+  let html='<span class="ok">'+gaps.length+' high-star '+(gaps.length===1?'repo':'repos')+' that could list you but do not yet</span>\n\n';
+  gaps.slice(0,10).forEach((g,i)=>{html+='<span class="warn">'+(i+1)+'. '+g.score+'</span>  <b>'+starText(g.stars)+'</b>  <span class="link">'+esc(g.fullName)+'</span>\n    section: '+esc(g.section)+'\n';if(g.description)html+='    <span class="dim">'+esc(g.description.slice(0,120))+'</span>\n';html+='\n';});
+  html+='<span class="dim">Next: run the CLI for Markdown and JSON output.</span>';
+  say(html);
+}
+form.addEventListener("submit", async (e)=>{e.preventDefault();const full=repoInput.value.trim().replace(/^https?:\/\/github\.com\//i,"").replace(/\/$/,"");if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(full)){say('<span class="error">Enter owner/repo, for example astral-sh/ruff.</span>');return;}button.disabled=true;try{await scan(full,tokenInput.value.trim());}catch(err){say('<span class="error">'+esc(err.message)+'</span>');}finally{button.disabled=false;}});
+const initial=new URLSearchParams(location.search).get("repo");if(initial)repoInput.value=initial;
+</script>
+</body>
+</html>
