@@ -1,0 +1,60 @@
+name: stargap
+description: Find high-star awesome lists that should mention your project but do not.
+author: stargap contributors
+
+inputs:
+  repo:
+    description: Target repository in owner/name form. Defaults to the current repository.
+    required: false
+    default: ""
+  token:
+    description: GitHub token used for search and API requests. Defaults to the workflow token.
+    required: false
+    default: ""
+  min-stars:
+    description: Ignore candidate lists below this star count.
+    required: false
+    default: "1000"
+  limit:
+    description: Maximum number of gaps to report.
+    required: false
+    default: "20"
+  query:
+    description: Override the generated GitHub search query.
+    required: false
+    default: ""
+  output:
+    description: Report path, relative to the workspace.
+    required: false
+    default: stargap-report.md
+
+outputs:
+  report:
+    description: Path to the generated Markdown report.
+    value: ${{ steps.scan.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - id: scan
+      shell: bash
+      env:
+        INPUT_REPO: ${{ inputs.repo }}
+        INPUT_MIN_STARS: ${{ inputs.min-stars }}
+        INPUT_LIMIT: ${{ inputs.limit }}
+        INPUT_QUERY: ${{ inputs.query }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        GITHUB_TOKEN: ${{ inputs.token || github.token }}
+      run: |
+        set -euo pipefail
+        repo="${INPUT_REPO:-$GITHUB_REPOSITORY}"
+        args=(--markdown --out "$INPUT_OUTPUT" --min-stars "$INPUT_MIN_STARS" --limit "$INPUT_LIMIT")
+        if [[ -n "$INPUT_QUERY" ]]; then
+          args+=(--query "$INPUT_QUERY")
+        fi
+        node "${{ github.action_path }}/bin/stargap.mjs" "$repo" "${args[@]}"
+        echo "report=$INPUT_OUTPUT" >> "$GITHUB_OUTPUT"
+
+branding:
+  icon: search
+  color: purple

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "query": "awesome cli",
+  "generatedAt": "2026-01-01T00:00:00.000Z",
+  "repo": "acme/widget",
+  "gaps": [
+    {
+      "fullName": "awesome/awesome-cli",
+      "stars": 12000,
+      "score": 92.5,
+      "reason": "high-star curated list, mentions 41 tools but not yours",
+      "url": "https://github.com/awesome/awesome-cli",
+      "entry": "- [widget](https://github.com/acme/widget) - A tiny CLI that does the thing."
+    },
+    {
+      "fullName": "someone/best-clis",
+      "stars": 4300,
+      "score": 61.0,
+      "reason": "comparison table in README",
+      "url": "https://github.com/someone/best-clis",
+      "entry": "- [widget](https://github.com/acme/widget) - A tiny CLI that does the thing."
+    }
+  ]
+}

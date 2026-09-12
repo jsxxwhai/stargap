@@ -1,0 +1,20 @@
+{
+  "name": "stargap",
+  "version": "0.1.0",
+  "description": "Find the GitHub repos your project should have been mentioned in.",
+  "type": "module",
+  "bin": { "stargap": "bin/stargap.mjs" },
+  "main": "src/scan.mjs",
+  "exports": { ".": "./src/scan.mjs" },
+  "files": ["bin", "src", "README.md", "LICENSE"],
+  "scripts": {
+    "start": "node bin/stargap.mjs",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=18" },
+  "keywords": ["github", "awesome-list", "growth", "discovery", "marketing", "cli", "oss"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/jsxxwhai/stargap.git" },
+  "homepage": "https://github.com/jsxxwhai/stargap#readme"
+}
+
