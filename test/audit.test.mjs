@@ -73,6 +73,26 @@ test("audit scores a strong repository as A or better", () => {
   assert.ok(result.fixes.length <= 5);
 });
 
+test("audit credits repo-root community files without README sections", () => {
+  const readme = "# widget\n\nA tiny, fast command runner for teams that ship from the terminal.\n";
+  const result = auditRepo(
+    {
+      ...strongRepo,
+      description: "A tiny, fast command runner for teams that ship from the terminal.",
+      community: { "SECURITY.md": "# Security", "CONTRIBUTING.md": "# Contributing" },
+    },
+    readme,
+    [],
+    { now: NOW },
+  );
+  const contributing = result.checks.find((item) => item.id === "contributing");
+  const security = result.checks.find((item) => item.id === "security");
+  assert.equal(contributing.earned, 3);
+  assert.equal(contributing.evidence, "CONTRIBUTING.md");
+  assert.equal(security.earned, 2);
+  assert.equal(security.evidence, "SECURITY.md");
+});
+
 test("audit gives a weak repository concrete fixes", () => {
   const result = auditRepo(
     { fullName: "someone/stub", name: "stub", stars: 0 },

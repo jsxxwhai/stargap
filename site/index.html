@@ -126,6 +126,15 @@ const raw = async (fullName) => {
   }
   return "";
 };
+const rawFile = async (fullName, name) => {
+  const res = await fetch("https://raw.githubusercontent.com/" + fullName + "/HEAD/" + name);
+  return res.ok ? res.text() : "";
+};
+const communityFiles = async (fullName) => {
+  const names = ["SECURITY.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "CHANGELOG.md"];
+  const entries = await Promise.all(names.map(async (name) => [name, await rawFile(fullName, name)]));
+  return Object.fromEntries(entries.filter(([, text]) => text));
+};
 const tokens = (text) => String(text).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#.-]+/u).filter((x) => x.length >= 2);
 const generic = new Set("awesome curated collection list lists directory catalog resources resource software library libraries framework frameworks package packages tool tools toolkit utility utilities app apps application applications project projects code development programming language platform system systems service services solution solutions standard miscellaneous various related general other reading writing editing management productivity learning tutorial tutorials guide guides example examples demo demos sample samples tips best top popular useful great good high quality free open source modern simple lightweight powerful extensible cross multi data web mobile desktop cloud server client api file files text image images video audio security testing test tests debug logging monitoring database databases storage network networking docs documentation".split(" "));
 const parts = (s) => String(s).toLowerCase().split(/[^a-z0-9\u4e00-\u9fff+#]+/u).filter(Boolean);
@@ -155,7 +164,7 @@ async function scan(fullName, token) {
   share.hidden = true;
   say('<span class="dim">Loading profile…</span>');
   const repo = await api("/repos/" + fullName, token);
-  const readme = await raw(fullName);
+  const [readme, community] = await Promise.all([raw(fullName), communityFiles(fullName)]);
   const stop = new Set("the a an and or for to of in on with is are that this it as by from your you our we be can will not no but if then than so at into about using use used uses via all any more most other open source free simple fast tiny small new easy based built build make makes just only also very cli tool tools app apps library lib framework project github https http com www readme docs documentation".split(" "));
   const score = new Map();
   const bump = (w,weight) => { if(!w||w.length<2||stop.has(w)||/^\d+$/.test(w))return; const e=score.get(w)||{weight:0,count:0}; e.weight=Math.max(e.weight,weight); e.count++; score.set(w,e); };
@@ -192,7 +201,7 @@ async function scan(fullName, token) {
     gaps.push({fullName:r.full_name,stars:r.stargazers_count,description:r.description||"",section:best.heading,subject:domain.overlap.slice(0,3).join(", "),score,url:r.html_url});
   }
   gaps.sort((a,b)=>b.score-a.score||b.stars-a.stars);
-  const audit = auditRepo({ fullName: repo.full_name, name: repo.name, description: repo.description || "", topics: repo.topics || [], homepage: repo.homepage || "", license: repo.license || null, stars: repo.stargazers_count || 0, pushedAt: repo.pushed_at || null, updatedAt: repo.updated_at || null }, readme, gaps);
+  const audit = auditRepo({ fullName: repo.full_name, name: repo.name, description: repo.description || "", topics: repo.topics || [], homepage: repo.homepage || "", license: repo.license || null, stars: repo.stargazers_count || 0, pushedAt: repo.pushed_at || null, updatedAt: repo.updated_at || null, community }, readme, gaps);
   latestAudit = audit;
   const shareUrl = location.origin + location.pathname + "?repo=" + encodeURIComponent(fullName);
   history.replaceState(null, "", shareUrl);

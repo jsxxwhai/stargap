@@ -112,6 +112,10 @@ test("a shared ?repo= link runs a full scan in a DOM sandbox", async () => {
   runInNewContext(browserScript, context);
   await new Promise((resolve) => setTimeout(resolve, 50));
 
+  assert.ok(
+    calls.some((url) => url.includes("raw.githubusercontent.com/astral-sh/ruff/HEAD/SECURITY.md")),
+    "shared link should check repo-root community files",
+  );
   assert.ok(calls.some((url) => url.includes("/search/repositories")), "shared link should trigger a GitHub search");
   assert.equal(elements.share.hidden, false, "share controls should be revealed after a successful scan");
   assert.match(elements.output.innerHTML, /awesome\/awesome-python/);

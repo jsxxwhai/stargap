@@ -6,7 +6,7 @@
 import { fetchRepo, isRateLimited, rateLimitHint, searchRepositories } from "./github.mjs";
 import { isGenericTerm } from "./generic.mjs";
 import { domainEvidence } from "./domain.mjs";
-import { fetchReadme } from "./readme.mjs";
+import { fetchCommunityFiles, fetchReadme } from "./readme.mjs";
 import { analyzeReadme } from "./match.mjs";
 import {
   extractKeywords,
@@ -36,6 +36,7 @@ export function profileRepo(input) {
     description,
     topics,
     readme,
+    community: input.community ?? {},
     url: input.url ?? `https://github.com/${input.fullName}`,
     homepage: input.homepage ?? "",
     license: input.license ?? null,
@@ -59,13 +60,17 @@ export function profileRepo(input) {
 /** Fetch a repo's metadata + README and build a profile. */
 export async function loadRepoProfile(fullName, options = {}) {
   const repo = await fetchRepo(fullName, options);
-  const readme = await fetchReadme(fullName, options);
+  const [readme, community] = await Promise.all([
+    fetchReadme(fullName, options),
+    fetchCommunityFiles(fullName, options),
+  ]);
   return profileRepo({
     fullName: repo.fullName,
     name: repo.name ?? repo.fullName.split("/").pop(),
     description: repo.description ?? "",
     topics: repo.topics ?? [],
     readme: readme ?? "",
+    community,
     url: repo.url,
     homepage: repo.homepage ?? "",
     license: repo.license ?? null,

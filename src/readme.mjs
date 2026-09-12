@@ -9,6 +9,9 @@
 import { githubJson, isNotFound, isRateLimited } from "./github.mjs";
 
 const RAW = "https://raw.githubusercontent.com";
+/** Community-health files checked in addition to the README. */
+const COMMUNITY_FILENAMES = ["SECURITY.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "CHANGELOG.md"];
+
 const RAW_FILENAMES = ["README.md", "readme.md", "Readme.md", "README.rst", "README.txt", "README"];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,3 +71,32 @@ export async function fetchReadme(fullName, options = {}) {
   return text;
 }
 
+/**
+ * Fetch small community-health files from a repo root.
+ *
+ * The GitHub community profile endpoint needs a core request; raw HEAD
+ * lookups are free and cacheable, so they are the primary path here.
+ *
+ * @returns {Promise<Record<string, string>>} filename -> contents for files that exist
+ */
+export async function fetchCommunityFiles(fullName, options = {}) {
+  const { cache, fetchImpl = globalThis.fetch } = options;
+  const cacheKey = `community ${fullName}`;
+  const cached = await cache?.get(cacheKey);
+  if (cached !== undefined && cached !== null) return cached;
+
+  const files = {};
+  await Promise.all(
+    COMMUNITY_FILENAMES.map(async (filename) => {
+      try {
+        const text = await fetchText(`${RAW}/${fullName}/HEAD/${filename}`, { ...options, fetchImpl });
+        if (text) files[filename] = text;
+      } catch {
+        // A missing or unreachable community file is simply absent.
+      }
+    }),
+  );
+
+  await cache?.set(cacheKey, files);
+  return files;
+}

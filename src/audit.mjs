@@ -80,8 +80,13 @@ function buildChecks(meta, readme, gaps, now) {
     /github\.com\/[^/]+\/[^/]+\/actions\/workflows/i,
     /\b(?:ci|continuous integration)\b/i,
   ]);
-  const hasContributing = /^#{1,4}\s+contribut/im.test(readme) || /\bCONTRIBUTING\.md\b/i.test(readme);
-  const hasSecurity = /^#{1,4}\s+security/im.test(readme) || /\bSECURITY\.md\b/i.test(readme);
+  const community = meta.community && typeof meta.community === "object" ? meta.community : {};
+  const hasContributing =
+    Boolean(community["CONTRIBUTING.md"]) ||
+    /^#{1,4}\s+contribut/im.test(readme) ||
+    /\bCONTRIBUTING\.md\b/i.test(readme);
+  const hasSecurity =
+    Boolean(community["SECURITY.md"]) || /^#{1,4}\s+security/im.test(readme) || /\bSECURITY\.md\b/i.test(readme);
   const freshDays = daysSince(meta.pushedAt ?? meta.updatedAt, now);
 
   const gapStars = gaps.map((gap) => Number(gap.stars) || 0);
@@ -148,11 +153,11 @@ function buildChecks(meta, readme, gaps, now) {
     check("contributing", "Trust", "Contribution path", 3,
       hasContributing ? 3 : 0,
       "Add CONTRIBUTING.md or a short Contributing section with the one command a newcomer should run.",
-      hasContributing ? "found" : "missing"),
+      hasContributing ? (community["CONTRIBUTING.md"] ? "CONTRIBUTING.md" : "README section") : "missing"),
     check("security", "Trust", "Security / support path", 2,
       hasSecurity ? 2 : 0,
       "Add SECURITY.md or a Security section so users know how to report a vulnerability.",
-      hasSecurity ? "found" : "missing"),
+      hasSecurity ? (community["SECURITY.md"] ? "SECURITY.md" : "README section") : "missing"),
     check("freshness", "Trust", "Recent activity", 5,
       freshDays <= 180 ? 5 : freshDays <= 365 ? 3 : freshDays <= 730 ? 1 : 0,
       "Ship a small release or commit at least every few months; stale repos lose stars at the install decision.",
