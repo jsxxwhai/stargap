@@ -1,20 +1,23 @@
 #!/usr/bin/env node
 /**
- * stargap — find the high-star GitHub repos that should mention your project but don't.
+ * stargap — find the high-star GitHub awesome-lists that should mention your project but don't.
  *
  * Zero dependencies. Node 18+.
  */
 
 import { parseArgs } from "node:util";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { loadRepoProfile, findGaps } from "../src/scan.mjs";
 import { renderJson, renderMarkdown, renderTerminal } from "../src/report.mjs";
 import { rateLimit } from "../src/github.mjs";
 import { cacheDir, createCache } from "../src/cache.mjs";
 
-const VERSION = "0.1.0";
+const packageJson = JSON.parse(
+  await readFile(new URL("../package.json", import.meta.url), "utf8"),
+);
+const VERSION = packageJson.version;
 
-const HELP = `stargap ${VERSION} — find the high-star GitHub repos that should mention you
+const HELP = `stargap ${VERSION} — find the high-star GitHub awesome-lists that should mention you
 
 Usage
   stargap <owner/repo> [options]

@@ -3,8 +3,11 @@ import assert from "node:assert/strict";
 import { createCache } from "../src/cache.mjs";
 import { GitHubError, fetchRepo, githubJson, isRateLimited, normalizeRepo, rateLimit, rateLimitHint } from "../src/github.mjs";
 import { tmpdir } from "node:os";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 test("cache round-trips values and expires entries", async () => {
   const dir = await mkdtemp(join(tmpdir(), "stargap-cache-"));
@@ -141,4 +144,12 @@ test("rateLimit never serves a cached budget", async () => {
   assert.equal(first.resources.core.remaining, 59);
   assert.equal(second.resources.core.remaining, 58);
   assert.equal(calls, 2);
+});
+test("CLI version stays in sync with package.json", async () => {
+  const packageJson = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  const { stdout } = await promisify(execFile)(process.execPath, [
+    fileURLToPath(new URL("../bin/stargap.mjs", import.meta.url)),
+    "--version",
+  ]);
+  assert.equal(stdout.trim(), packageJson.version);
 });
