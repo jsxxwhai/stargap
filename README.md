@@ -13,7 +13,7 @@
 You shipped something useful. The people who need it are reading an awesome-list that has never heard of you. `stargap` finds those lists, filters out the noise, ranks the real gaps, and gives you a paste-ready entry.
 
 ```console
-$ npx --yes github:jsxxwhai/stargap#v0.1.1 astral-sh/ruff --min-stars 300 --limit 6
+$ npx --yes github:jsxxwhai/stargap#v0.1.2 astral-sh/ruff --min-stars 300 --limit 6
 
 stargap — astral-sh/ruff
 1 high-star repo that could list you but do not yet
@@ -37,23 +37,23 @@ Getting stars is not only a code problem; it is also a distribution problem. A c
 Run the released version straight from GitHub — no clone, no install step:
 
 ```bash
-npx --yes github:jsxxwhai/stargap#v0.1.1 <owner/repo>
+npx --yes github:jsxxwhai/stargap#v0.1.2 <owner/repo>
 ```
 
 Or open the [browser app](https://jsxxwhai.github.io/stargap/) if you prefer zero local setup. No runtime dependencies, Node 18+ for the CLI.
 
 ```bash
 # A Markdown report you can save and paste into an issue or PR
-npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --markdown --out GAPS.md
+npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --markdown --out GAPS.md
 
 # Machine-readable output for your own tooling
-npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --json
+npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --json
 
 # Only consider big lists
-npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --min-stars 1000
+npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --min-stars 1000
 
 # Target a specific ecosystem
-npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --query "awesome in:name rust cli"
+npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --query "awesome in:name rust cli"
 ```
 
 Once the package is published, the shorter `npx stargap <owner/repo>` will work too. The GitHub form above is the currently supported zero-install path.
@@ -64,10 +64,10 @@ Unauthenticated GitHub allows **60 core requests/hour** and only **10 search req
 
 ```bash
 export GITHUB_TOKEN=ghp_xxx   # classic token, no scopes needed
-npx --yes github:jsxxwhai/stargap#v0.1.1 doctor   # shows remaining budget
+npx --yes github:jsxxwhai/stargap#v0.1.2 doctor   # shows remaining budget
 ```
 
-Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `npx --yes github:jsxxwhai/stargap#v0.1.1 cache` clears it.
+Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `npx --yes github:jsxxwhai/stargap#v0.1.2 cache` clears it.
 
 ## What it actually does
 
@@ -152,7 +152,7 @@ const gaps = await findGaps(profile, { minStars: 500 });
 Run a weekly gap check without installing anything:
 
 ```yaml
-- uses: jsxxwhai/stargap@v0.1.1
+- uses: jsxxwhai/stargap@v0.1.2
   with:
     min-stars: "1000"
     output: stargap-report.md
