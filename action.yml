@@ -54,6 +54,13 @@ runs:
         fi
         node "${{ github.action_path }}/bin/stargap.mjs" "$repo" "${args[@]}"
         echo "report=$INPUT_OUTPUT" >> "$GITHUB_OUTPUT"
+        if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+          {
+            echo "## stargap report"
+            echo
+            cat "$INPUT_OUTPUT"
+          } >> "$GITHUB_STEP_SUMMARY"
+        fi
 
 branding:
   icon: search

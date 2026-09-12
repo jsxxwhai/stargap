@@ -13,7 +13,7 @@
 You shipped something useful. The people who need it are reading an awesome-list that has never heard of you. `stargap` finds those lists, filters out the noise, ranks the real gaps, and gives you a paste-ready entry.
 
 ```console
-$ npx --yes github:jsxxwhai/stargap#v0.1.2 astral-sh/ruff --min-stars 300 --limit 6
+$ node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
 
 stargap — astral-sh/ruff
 1 high-star repo that could list you but do not yet
@@ -34,29 +34,39 @@ Getting stars is not only a code problem; it is also a distribution problem. A c
 
 ## Quick start
 
-Run the released version straight from GitHub — no clone, no install step:
+The fastest path is the [browser app](https://jsxxwhai.github.io/stargap/) — no install, no account, no backend.
+
+For the CLI, run the released version from a shallow clone. Node 18+ and Git are the only requirements:
 
 ```bash
-npx --yes github:jsxxwhai/stargap#v0.1.2 <owner/repo>
+git clone --depth 1 --branch v0.1.2 https://github.com/jsxxwhai/stargap
+cd stargap
+node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
 ```
 
-Or open the [browser app](https://jsxxwhai.github.io/stargap/) if you prefer zero local setup. No runtime dependencies, Node 18+ for the CLI.
+The archive route works without Git too:
+
+```bash
+curl -fsSL https://github.com/jsxxwhai/stargap/archive/refs/tags/v0.1.2.tar.gz | tar -xz
+cd stargap-0.1.2
+node bin/stargap.mjs astral-sh/ruff --min-stars 300
+```
 
 ```bash
 # A Markdown report you can save and paste into an issue or PR
-npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --markdown --out GAPS.md
+node bin/stargap.mjs astral-sh/ruff --markdown --out GAPS.md
 
 # Machine-readable output for your own tooling
-npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --json
+node bin/stargap.mjs astral-sh/ruff --json
 
 # Only consider big lists
-npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --min-stars 1000
+node bin/stargap.mjs astral-sh/ruff --min-stars 1000
 
 # Target a specific ecosystem
-npx --yes github:jsxxwhai/stargap#v0.1.2 acme/widget --query "awesome in:name rust cli"
+node bin/stargap.mjs astral-sh/ruff --query "awesome in:name rust cli"
 ```
 
-Once the package is published, the shorter `npx stargap <owner/repo>` will work too. The GitHub form above is the currently supported zero-install path.
+Once the package is published to npm, `npx stargap <owner/repo>` will be the shortest path. The clone and archive commands above are verified today.
 
 ## Set a token (recommended)
 
@@ -64,10 +74,10 @@ Unauthenticated GitHub allows **60 core requests/hour** and only **10 search req
 
 ```bash
 export GITHUB_TOKEN=ghp_xxx   # classic token, no scopes needed
-npx --yes github:jsxxwhai/stargap#v0.1.2 doctor   # shows remaining budget
+node bin/stargap.mjs doctor   # shows remaining budget
 ```
 
-Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `npx --yes github:jsxxwhai/stargap#v0.1.2 cache` clears it.
+Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `node bin/stargap.mjs cache` clears it.
 
 ## What it actually does
 
@@ -158,7 +168,7 @@ Run a weekly gap check without installing anything:
     output: stargap-report.md
 ```
 
-The report path is exposed as `steps.<id>.outputs.report`. See [examples/stargap.yml](examples/stargap.yml) for a scheduled workflow.
+The report path is exposed as `steps.<id>.outputs.report`, and the same report is written to the workflow job summary so it is visible without downloading an artifact. See [examples/stargap.yml](examples/stargap.yml) for a scheduled workflow.
 
 ## Development
 

@@ -4,6 +4,16 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Shareable browser results: a scan updates the URL, copy-link, X and Hacker News actions appear after a successful scan, and `?repo=` links auto-run.
+- GitHub Action reports now also appear in the workflow job summary.
+
+### Changed
+
+- README quick start now uses verified clone and archive commands instead of the unverified `npx github:` path.
+- Added browser-app regression tests, including a DOM sandbox that runs a full scan.
+
 ## [0.1.2] - 2026-09-12
 
 ### Fixed

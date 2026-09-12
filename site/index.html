@@ -32,7 +32,7 @@ h1{font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.045em;margin
 .lede{font-size:20px;color:#b7c4d9;max-width:700px;margin:0 0 32px}.lede strong{color:var(--text)}
 .search{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:16px;box-shadow:0 22px 70px #0007;max-width:760px}.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font:inherit;padding:12px 14px}.search input::placeholder{color:#65748d}
 button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100deg,#22d3ee,#818cf8);color:#07111f;font:700 15px ui-sans-serif,system-ui,sans-serif;padding:12px 18px;white-space:nowrap}button:hover{filter:brightness(1.08)}button:disabled{opacity:.55;cursor:wait}
-.hint{color:var(--muted);font-size:13px;margin-top:12px}.hint code{color:#cbd5e1}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:52px}.card{background:linear-gradient(180deg,#121b2c,#0d1422);border:1px solid var(--line);border-radius:18px;padding:22px}.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 16px}.terminal{font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:180px;color:#cbd5e1}.terminal .cmd{color:var(--violet)}.terminal .ok{color:var(--green)}.terminal .warn{color:var(--amber)}.terminal .dim{color:var(--muted)}.terminal .link{color:var(--cyan)}
+.hint{color:var(--muted);font-size:13px;margin-top:12px}.hint code{color:#cbd5e1}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-top:52px}.card{background:linear-gradient(180deg,#121b2c,#0d1422);border:1px solid var(--line);border-radius:18px;padding:22px}.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 16px}.terminal{font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:180px;color:#cbd5e1}.terminal .cmd{color:var(--violet)}.terminal .ok{color:var(--green)}.terminal .warn{color:var(--amber)}.terminal .dim{color:var(--muted)}.terminal .link{color:var(--cyan)}.terminal .gap{color:#dbeafe}.terminal a{color:var(--cyan)}.share[hidden]{display:none}.share{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}.share button,.share a{background:#16233a;border:1px solid var(--line);color:#cbd5e1;border-radius:9px;padding:8px 12px;font:600 13px ui-sans-serif,system-ui,sans-serif;text-decoration:none;cursor:pointer}.share button:hover,.share a:hover{border-color:var(--cyan);color:var(--text)}
 .steps{list-style:none;padding:0;margin:0}.steps li{display:flex;gap:12px;margin-bottom:15px;color:#b7c4d9}.steps b{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:50%;background:#1e2a42;color:var(--cyan);font-size:12px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.feature{background:#0d1422aa;border:1px solid var(--line);border-radius:14px;padding:16px}.feature b{display:block;color:var(--text);margin-bottom:5px}.feature span{color:var(--muted);font-size:14px}.foot{margin-top:48px;color:#65748d;font-size:13px}.error{color:var(--red)}
 @media(max-width:760px){.top{margin-bottom:42px}nav{display:none}.search{flex-direction:column}.grid,.features{grid-template-columns:1fr}.hero{margin-top:18px}}
 </style>
@@ -58,6 +58,7 @@ button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100
   <div class="card">
     <h2>Live result</h2>
     <div class="terminal" id="output"><span class="dim">Enter a repository to see its distribution gaps.</span></div>
+    <div class="share" id="share" hidden><button type="button" id="copy-link">Copy result link</button><a id="share-x" target="_blank" rel="noopener">Share on X</a><a id="share-hn" target="_blank" rel="noopener">Post to HN</a></div>
   </div>
   <div class="card">
     <h2>How it works</h2>
@@ -84,6 +85,10 @@ const form = $("form");
 const repoInput = $("repo");
 const tokenInput = $("token");
 const button = $("run");
+const share = $("share");
+const copyLink = $("copy-link");
+const shareX = $("share-x");
+const shareHn = $("share-hn");
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const say = (html) => { output.innerHTML = html; };
 const api = async (path, token) => {
@@ -113,6 +118,7 @@ const clean = (h) => String(h).replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{2BFF}\u{
 const isTopic = (h) => { const c=clean(h); return c.length>=3&&c.length<=60&&!NON.test(c)&&c.split(/\s+/).length<=7&&/[a-z\u4e00-\u9fff]/i.test(c); };
 const starText = (n) => n>=1000?(n/1000).toFixed(n>=10000?0:1)+"k":String(n);
 async function scan(fullName, token) {
+  share.hidden = true;
   say('<span class="dim">Loading profile…</span>');
   const repo = await api("/repos/" + fullName, token);
   const readme = await raw(fullName);
@@ -151,13 +157,20 @@ async function scan(fullName, token) {
   }
   gaps.sort((a,b)=>b.score-a.score||b.stars-a.stars);
   if(!gaps.length){say('<span class="ok">0 gaps found.</span>\n\nNo high-star curated list matched a genuine topic section. Try a repo with more GitHub topics.');return;}
+  const shareUrl = location.origin + location.pathname + "?repo=" + encodeURIComponent(fullName);
+  history.replaceState(null, "", shareUrl);
+  const text = "stargap found " + gaps.length + " high-star awesome lists missing " + fullName + ". Check where your project is missing:";
+  copyLink.onclick = async () => { try { await navigator.clipboard.writeText(shareUrl); copyLink.textContent = "Copied!"; setTimeout(()=>copyLink.textContent="Copy result link",1500); } catch { copyLink.textContent = "Copy failed"; } };
+  shareX.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(shareUrl);
+  shareHn.href = "https://news.ycombinator.com/submitlink?u=" + encodeURIComponent(shareUrl) + "&t=" + encodeURIComponent("stargap — find where your project is missing");
+  share.hidden = false;
   let html='<span class="ok">'+gaps.length+' high-star '+(gaps.length===1?'repo':'repos')+' that could list you but do not yet</span>\n\n';
-  gaps.slice(0,10).forEach((g,i)=>{html+='<span class="warn">'+(i+1)+'. '+g.score+'</span>  <b>'+starText(g.stars)+'</b>  <span class="link">'+esc(g.fullName)+'</span>\n    section: '+esc(g.section)+'\n';if(g.description)html+='    <span class="dim">'+esc(g.description.slice(0,120))+'</span>\n';html+='\n';});
+  gaps.slice(0,10).forEach((g,i)=>{html+='<span class="warn">'+(i+1)+'. '+g.score+'</span>  <b>'+starText(g.stars)+'</b>  <a class="link" href="'+esc(g.url)+'" target="_blank" rel="noopener">'+esc(g.fullName)+'</a>\n    section: '+esc(g.section)+'\n';if(g.description)html+='    <span class="dim">'+esc(g.description.slice(0,120))+'</span>\n';html+='\n';});
   html+='<span class="dim">Next: run the CLI for Markdown and JSON output.</span>';
   say(html);
 }
 form.addEventListener("submit", async (e)=>{e.preventDefault();const full=repoInput.value.trim().replace(/^https?:\/\/github\.com\//i,"").replace(/\/$/,"");if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(full)){say('<span class="error">Enter owner/repo, for example astral-sh/ruff.</span>');return;}button.disabled=true;try{await scan(full,tokenInput.value.trim());}catch(err){say('<span class="error">'+esc(err.message)+'</span>');}finally{button.disabled=false;}});
-const initial=new URLSearchParams(location.search).get("repo");if(initial)repoInput.value=initial;
+const initial=new URLSearchParams(location.search).get("repo");if(initial){repoInput.value=initial;form.requestSubmit();}
 </script>
 </body>
 </html>
