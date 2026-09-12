@@ -1,6 +1,8 @@
 # stargap
 
-**Find the high-star GitHub repos that should mention your project — but don't.**
+**Find the high-star GitHub awesome-lists that should mention your project — but don't.**
+
+> If this saves you a README crawl, [star the repo](https://github.com/jsxxwhai/stargap) so other maintainers can find it.
 
 [![CI](https://github.com/jsxxwhai/stargap/actions/workflows/ci.yml/badge.svg)](https://github.com/jsxxwhai/stargap/actions/workflows/ci.yml) [![release](https://img.shields.io/github/v/release/jsxxwhai/stargap)](https://github.com/jsxxwhai/stargap/releases) [![license](https://img.shields.io/github/license/jsxxwhai/stargap)](LICENSE)
 
@@ -174,6 +176,8 @@ Everything is plain ESM with zero runtime dependencies. Tests inject fake `fetch
 ## Launching
 
 Building something that deserves stars is not the same as getting them. The [launch plan](docs/launch.md) is the short, honest checklist used for this repository.
+
+If you maintain an OSS project and want to help shape this tool, open a [bad-match report](https://github.com/jsxxwhai/stargap/issues/new?template=bad_match.md). Precision reports become regression tests.
 
 ## License
 

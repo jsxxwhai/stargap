@@ -1,7 +1,7 @@
 {
   "name": "stargap",
   "version": "0.1.1",
-  "description": "Find the GitHub repos your project should have been mentioned in.",
+  "description": "Find the high-star GitHub awesome-lists that should mention your project but do not.",
   "type": "module",
   "bin": { "stargap": "bin/stargap.mjs" },
   "main": "src/scan.mjs",
@@ -15,6 +15,6 @@
   "keywords": ["github", "awesome-list", "growth", "discovery", "marketing", "cli", "oss"],
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/jsxxwhai/stargap.git" },
-  "homepage": "https://github.com/jsxxwhai/stargap#readme"
+  "homepage": "https://jsxxwhai.github.io/stargap/"
 }
 

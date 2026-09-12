@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>stargap — find where your project is missing</title>
 <meta name="description" content="Find the high-star GitHub awesome lists that should mention your project but do not. No install, runs in your browser.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#080b14">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="stargap">
+<meta property="og:title" content="stargap — find where your project is missing">
+<meta property="og:description" content="Search high-star awesome lists, verify real topic sections, and see where your project is missing.">
+<meta property="og:url" content="https://jsxxwhai.github.io/stargap/">
+<meta property="og:image" content="https://jsxxwhai.github.io/stargap/social-card.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="stargap — find where your project is missing">
+<meta name="twitter:description" content="Find the high-star awesome lists that should mention your project — but don't.">
+<meta name="twitter:image" content="https://jsxxwhai.github.io/stargap/social-card.png">
+<link rel="canonical" href="https://jsxxwhai.github.io/stargap/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>★</text></svg>">
 <style>
 :root{--bg:#080b14;--panel:#101827;--line:#26334d;--text:#e7edf8;--muted:#8fa0bb;--cyan:#67e8f9;--violet:#a78bfa;--amber:#fbbf24;--green:#34d399;--red:#fb7185}
@@ -26,17 +41,17 @@ button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100
 <main>
 <header class="top">
   <div class="brand">★ stargap</div>
-  <nav><a href="https://github.com/jsxxwhai/stargap">GitHub</a><a href="https://github.com/jsxxwhai/stargap/blob/main/docs/example-report.md">Example report</a><a href="https://github.com/jsxxwhai/stargap#quick-start">CLI</a></nav>
+  <nav><a href="https://github.com/jsxxwhai/stargap">GitHub</a><a href="https://github.com/jsxxwhai/stargap/blob/main/docs/example-report.md">Example report</a><a href="https://github.com/jsxxwhai/stargap#quick-start">CLI</a><a href="https://github.com/jsxxwhai/stargap" title="Star stargap on GitHub">★ Star</a></nav>
 </header>
 <section class="hero">
-  <div class="kicker">distribution intelligence for open source</div>
+  <div class="kicker">free · zero dependencies · no signup</div>
   <h1>Find the lists that should mention <em>your project</em>.</h1>
   <p class="lede">stargap searches high-star awesome lists, verifies that they have a matching topic section, and tells you where your project is <strong>still missing</strong>. Runs entirely in your browser.</p>
   <form class="search" id="form">
     <input id="repo" autocomplete="off" spellcheck="false" placeholder="owner/repo, e.g. astral-sh/ruff" aria-label="GitHub repository">
     <button id="run" type="submit">Find gaps →</button>
   </form>
-  <p class="hint">No install. No signup. GitHub anonymous limits may apply; paste a <code>read-only token</code> below for larger scans.</p>
+  <p class="hint">Runs entirely in your browser. GitHub anonymous limits may apply; paste a <code>read-only token</code> below for larger scans.</p>
   <input id="token" type="password" autocomplete="off" placeholder="Optional GitHub token (stored only in this tab)" style="margin-top:10px;width:min(760px,100%);background:#101827;border:1px solid #26334d;border-radius:10px;color:#e7edf8;padding:10px 12px;font:13px ui-monospace,monospace">
 </section>
 <section class="grid">
@@ -60,7 +75,7 @@ button{cursor:pointer;border:0;border-radius:10px;background:linear-gradient(100
   <div class="feature"><b>Paste-ready output</b><span>Each result includes a Markdown entry you can adapt for a PR.</span></div>
   <div class="feature"><b>Honest limits</b><span>Heuristics, not magic. False positives become regression tests.</span></div>
 </div>
-<p class="foot">MIT licensed · built for maintainers who would rather earn attention than spam for it.</p>
+<p class="foot">MIT licensed · built for maintainers who would rather earn attention than spam for it. <a href="https://github.com/jsxxwhai/stargap">Star stargap on GitHub</a> if it saves you a README crawl.</p>
 </main>
 <script type="module">
 const $ = (id) => document.getElementById(id);
