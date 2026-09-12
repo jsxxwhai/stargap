@@ -13,7 +13,7 @@
 You shipped something useful. The people who need it are reading an awesome-list that has never heard of you. `stargap` finds those lists, filters out the noise, ranks the real gaps, and gives you a paste-ready entry.
 
 ```console
-$ npx stargap astral-sh/ruff --min-stars 300 --limit 6
+$ npx --yes github:jsxxwhai/stargap#v0.1.1 astral-sh/ruff --min-stars 300 --limit 6
 
 stargap — astral-sh/ruff
 1 high-star repo that could list you but do not yet
@@ -34,25 +34,29 @@ Getting stars is not only a code problem; it is also a distribution problem. A c
 
 ## Quick start
 
+Run the released version straight from GitHub — no clone, no install step:
+
 ```bash
-npx stargap <owner/repo>
+npx --yes github:jsxxwhai/stargap#v0.1.1 <owner/repo>
 ```
 
-No install, no runtime dependencies, Node 18+.
+Or open the [browser app](https://jsxxwhai.github.io/stargap/) if you prefer zero local setup. No runtime dependencies, Node 18+ for the CLI.
 
 ```bash
 # A Markdown report you can save and paste into an issue or PR
-npx stargap acme/widget --markdown --out GAPS.md
+npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --markdown --out GAPS.md
 
 # Machine-readable output for your own tooling
-npx stargap acme/widget --json
+npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --json
 
 # Only consider big lists
-npx stargap acme/widget --min-stars 1000
+npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --min-stars 1000
 
 # Target a specific ecosystem
-npx stargap acme/widget --query "awesome in:name rust cli"
+npx --yes github:jsxxwhai/stargap#v0.1.1 acme/widget --query "awesome in:name rust cli"
 ```
+
+Once the package is published, the shorter `npx stargap <owner/repo>` will work too. The GitHub form above is the currently supported zero-install path.
 
 ## Set a token (recommended)
 
@@ -60,10 +64,10 @@ Unauthenticated GitHub allows **60 core requests/hour** and only **10 search req
 
 ```bash
 export GITHUB_TOKEN=ghp_xxx   # classic token, no scopes needed
-npx stargap doctor            # shows remaining budget
+npx --yes github:jsxxwhai/stargap#v0.1.1 doctor   # shows remaining budget
 ```
 
-Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `stargap cache` clears it.
+Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly free. `npx --yes github:jsxxwhai/stargap#v0.1.1 cache` clears it.
 
 ## What it actually does
 
@@ -105,7 +109,7 @@ Responses are cached in `~/.stargap/cache` for 24h, so repeat scans are nearly f
 
 ## Using the results well
 
-`stargap` tells you where you are missing. It does **not** open PRs for you — deliberately.
+`stargap` tells you where you are missing. It does **not** open PRs for you — deliberately. Run it with the GitHub command above, or use the browser app.
 
 - Read each list's `CONTRIBUTING.md` and follow it exactly.
 - Open **one PR per list**, explain why the entry fits that section, and keep it short.
@@ -161,7 +165,7 @@ The report path is exposed as `steps.<id>.outputs.report`. See [examples/stargap
 ```bash
 git clone https://github.com/jsxxwhai/stargap
 cd stargap
-npm test        # 35 tests, no network required
+npm test        # 36 tests, no network required
 ```
 
 Everything is plain ESM with zero runtime dependencies. Tests inject fake `fetch` and search functions, so the suite never touches the network.

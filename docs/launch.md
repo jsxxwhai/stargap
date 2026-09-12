@@ -18,7 +18,7 @@ dashboard and not automated spam.
 - [ ] Add the repository description: "Find the high-star GitHub repos that should mention your project — but don't."
 - [ ] Add topics: `awesome-list`, `github`, `cli`, `oss`, `developer-tools`, `distribution`.
 - [ ] Publish `v0.1.0` and attach release notes.
-- [ ] Publish to npm so `npx stargap` works exactly as documented.
+- [ ] Publish to npm so the short `npx stargap` form works; until then, document the verified GitHub tarball command.
 - [ ] Enable Issues and Discussions; keep Issues enabled so bad-match reports become regression tests.
 
 ## Launch post (Show HN / Reddit / Lobsters)
@@ -39,14 +39,14 @@ Post body:
 > does not already mention you, and ranks the gaps by relevance, list-ness and
 > reach. It outputs a paste-ready entry.
 >
-> It is a zero-dependency Node CLI: `npx stargap <owner/repo>`.
+> It is a zero-dependency Node CLI: `npx --yes github:jsxxwhai/stargap#v0.1.1 <owner/repo>`.
 >
 > I deliberately made it precise rather than exhaustive — early versions
 > reported every "Tools" section as a match, so I added full-coverage topic
 > matching and regression tests for the false positives. I would rather return
 > one real gap than fifty noisy ones.
 >
-> Example: `npx stargap astral-sh/ruff --min-stars 300`
+> Example: `npx --yes github:jsxxwhai/stargap#v0.1.1 astral-sh/ruff --min-stars 300`
 >
 > I would love feedback on false positives and false negatives. Those reports
 > are the most useful contribution right now.
