@@ -24,9 +24,10 @@ test("browser app script parses as valid ESM", async () => {
 
 test("README only advertises verified install paths", async () => {
   const readme = await read("../README.md");
+  const { version } = JSON.parse(await read("../package.json"));
   assert.doesNotMatch(readme, /npx --yes github:jsxxwhai\/stargap/);
-  assert.match(readme, /git clone --depth 1 --branch v0\.1\.2/);
-  assert.match(readme, /archive\/refs\/tags\/v0\.1\.2\.tar\.gz/);
+  assert.match(readme, new RegExp(`git clone --depth 1 --branch v${version.replace(/\./g, "\\.")}`));
+  assert.match(readme, new RegExp(`archive/refs/tags/v${version.replace(/\./g, "\\.")}\\.tar\\.gz`));
 });
 
 test("browser app auto-runs a shared repo link and exposes share controls", async () => {

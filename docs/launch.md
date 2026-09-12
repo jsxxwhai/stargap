@@ -17,7 +17,7 @@ dashboard and not automated spam.
 - [ ] Create the GitHub repository and push `main`.
 - [ ] Add the repository description: "Find the high-star GitHub repos that should mention your project — but don't."
 - [ ] Add topics: `awesome-list`, `github`, `cli`, `oss`, `developer-tools`, `distribution`.
-- [x] Publish `v0.1.2` and attach release notes.
+- [x] Publish `v0.1.3` and attach release notes.
 - [ ] Publish to npm so the short `npx stargap` form works; until then, document the verified clone/archive commands.
 - [ ] Enable Issues and Discussions; keep Issues enabled so bad-match reports become regression tests.
 
@@ -46,7 +46,7 @@ Post body:
 > matching and regression tests for the false positives. I would rather return
 > one real gap than fifty noisy ones.
 >
-> `git clone --depth 1 --branch v0.1.2 https://github.com/jsxxwhai/stargap && cd stargap && node bin/stargap.mjs astral-sh/ruff --min-stars 300`
+> `git clone --depth 1 --branch v0.1.3 https://github.com/jsxxwhai/stargap && cd stargap && node bin/stargap.mjs astral-sh/ruff --min-stars 300`
 >
 > I would love feedback on false positives and false negatives. Those reports
 > are the most useful contribution right now.

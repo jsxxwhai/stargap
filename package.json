@@ -1,6 +1,6 @@
 {
   "name": "stargap",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Find the high-star GitHub awesome-lists that should mention your project but do not.",
   "type": "module",
   "bin": { "stargap": "bin/stargap.mjs" },

@@ -39,7 +39,7 @@ The fastest path is the [browser app](https://jsxxwhai.github.io/stargap/) — n
 For the CLI, run the released version from a shallow clone. Node 18+ and Git are the only requirements:
 
 ```bash
-git clone --depth 1 --branch v0.1.2 https://github.com/jsxxwhai/stargap
+git clone --depth 1 --branch v0.1.3 https://github.com/jsxxwhai/stargap
 cd stargap
 node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
 ```
@@ -47,7 +47,7 @@ node bin/stargap.mjs astral-sh/ruff --min-stars 300 --limit 6
 The archive route works without Git too:
 
 ```bash
-curl -fsSL https://github.com/jsxxwhai/stargap/archive/refs/tags/v0.1.2.tar.gz | tar -xz
+curl -fsSL https://github.com/jsxxwhai/stargap/archive/refs/tags/v0.1.3.tar.gz | tar -xz
 cd stargap-0.1.2
 node bin/stargap.mjs astral-sh/ruff --min-stars 300
 ```
@@ -162,7 +162,7 @@ const gaps = await findGaps(profile, { minStars: 500 });
 Run a weekly gap check without installing anything:
 
 ```yaml
-- uses: jsxxwhai/stargap@v0.1.2
+- uses: jsxxwhai/stargap@v0.1.3
   with:
     min-stars: "1000"
     output: stargap-report.md
@@ -175,7 +175,7 @@ The report path is exposed as `steps.<id>.outputs.report`, and the same report i
 ```bash
 git clone https://github.com/jsxxwhai/stargap
 cd stargap
-npm test        # 36 tests, no network required
+npm test        # 41 tests, no network required
 ```
 
 Everything is plain ESM with zero runtime dependencies. Tests inject fake `fetch` and search functions, so the suite never touches the network.
